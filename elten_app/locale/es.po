@@ -1,0 +1,577 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MileByMile 1.1\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
+
+msgid "Mile by Mile"
+msgstr "Milla a milla"
+
+msgid "Play against the bot"
+msgstr "Jugar contra el bot"
+
+msgid "Rules"
+msgstr "Reglas"
+
+msgid "Exit"
+msgstr "Salir"
+
+msgid "Settings"
+msgstr "Ajustes"
+
+msgid "Card set"
+msgstr "Mazo de cartas"
+
+msgid "Distance"
+msgstr "Distancia"
+
+msgid "Number of decks"
+msgstr "Número de barajas"
+
+msgid "Each player has their own deck"
+msgstr "Cada jugador tiene su propia baraja"
+
+msgid "1 common deck"
+msgstr "1 baraja común"
+
+msgid "2 common decks"
+msgstr "2 barajas comunes"
+
+msgid "3 common decks"
+msgstr "3 barajas comunes"
+
+msgid "4 common decks"
+msgstr "4 barajas comunes"
+
+msgid "5 common decks"
+msgstr "5 barajas comunes"
+
+msgid "OK"
+msgstr "Aceptar"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "On cars"
+msgstr "En coches"
+
+msgid "On horses"
+msgstr "A caballo"
+
+msgid "%{d} miles"
+msgstr "%{d} millas"
+
+msgid "Let's go!"
+msgstr "¡Vamos allá!"
+
+msgid "By fate's will, you move first."
+msgstr "Por voluntad del destino, empiezas tú."
+
+msgid "By fate's will, the bot moves first."
+msgstr "Por voluntad del destino, el bot empieza."
+
+msgid "Your turn"
+msgstr "Tu turno"
+
+msgid "Your turn."
+msgstr "Tu turno."
+
+msgid "The bot moves."
+msgstr "Le toca al bot."
+
+msgid "You"
+msgstr "Tú"
+
+msgid "Bot"
+msgstr "Bot"
+
+msgid "You drew %{card}."
+msgstr "Has robado %{card}."
+
+msgid "The bot drew %{card}."
+msgstr "El bot ha robado %{card}."
+
+msgid "You started the engine."
+msgstr "Has arrancado el motor."
+
+msgid "The bot started the engine."
+msgstr "El bot ha arrancado el motor."
+
+msgid "You refueled."
+msgstr "Has repostado."
+
+msgid "The bot refueled."
+msgstr "El bot ha repostado."
+
+msgid "You fixed the tire."
+msgstr "Has arreglado la rueda."
+
+msgid "The bot fixed the tire."
+msgstr "El bot ha arreglado la rueda."
+
+msgid "You repaired the car."
+msgstr "Has reparado el coche."
+
+msgid "The bot repaired the car."
+msgstr "El bot ha reparado el coche."
+
+msgid "You turned forward."
+msgstr "Te has vuelto a mirar hacia adelante."
+
+msgid "The bot turned forward."
+msgstr "El bot ha vuelto a mirar hacia adelante."
+
+msgid "You removed the speed limit."
+msgstr "Has quitado el límite de velocidad."
+
+msgid "The bot removed the speed limit."
+msgstr "El bot ha quitado el límite de velocidad."
+
+msgid "You protected yourself from %{hazard}."
+msgstr "Te has protegido de %{hazard}."
+
+msgid "The bot protected itself from %{hazard}."
+msgstr "El bot se ha protegido de %{hazard}."
+
+msgid "engine stalling"
+msgstr "que se te cale el motor"
+
+msgid "fuel draining"
+msgstr "que te vacíen el depósito"
+
+msgid "a flat tire"
+msgstr "los pinchazos"
+
+msgid "an accident"
+msgstr "los accidentes"
+
+msgid "being turned around"
+msgstr "la media vuelta"
+
+msgid "the speed limit"
+msgstr "el límite de velocidad"
+
+msgid "skipping a turn"
+msgstr "perder el turno"
+
+msgid "You drove %{miles}."
+msgstr "Has recorrido %{miles}."
+
+msgid "The bot drove %{miles}."
+msgstr "El bot ha recorrido %{miles}."
+
+msgid "You drove back %{miles}."
+msgstr "Has recorrido %{miles} hacia atrás."
+
+msgid "The bot drove back %{miles}."
+msgstr "El bot ha recorrido %{miles} hacia atrás."
+
+msgid "You discarded %{card}."
+msgstr "Has descartado %{card}."
+
+msgid "The bot discarded %{card}."
+msgstr "El bot ha descartado %{card}."
+
+msgid "You galloped %{miles}."
+msgstr "Has galopado %{miles}."
+
+msgid "The bot galloped %{miles}."
+msgstr "El bot ha galopado %{miles}."
+
+msgid "You galloped back %{miles}."
+msgstr "Has galopado %{miles} hacia atrás."
+
+msgid "The bot galloped back %{miles}."
+msgstr "El bot ha galopado %{miles} hacia atrás."
+
+msgid "You saddled up."
+msgstr "Has ensillado."
+
+msgid "The bot saddled up."
+msgstr "El bot ha ensillado."
+
+msgid "You fed the horse."
+msgstr "Has alimentado al caballo."
+
+msgid "The bot fed the horse."
+msgstr "El bot ha alimentado al caballo."
+
+msgid "You shod the horse."
+msgstr "Has herrado al caballo."
+
+msgid "The bot shod the horse."
+msgstr "El bot ha herrado al caballo."
+
+msgid "You let the horse rest."
+msgstr "Has dejado descansar al caballo."
+
+msgid "The bot let the horse rest."
+msgstr "El bot ha dejado descansar al caballo."
+
+msgid "You were stopped."
+msgstr "Te han detenido."
+
+msgid "The bot was stopped."
+msgstr "Han detenido al bot."
+
+msgid "You ran out of fuel."
+msgstr "Te has quedado sin combustible."
+
+msgid "The bot ran out of fuel."
+msgstr "El bot se ha quedado sin combustible."
+
+msgid "You must pump up your tire."
+msgstr "Tienes que hinchar la rueda."
+
+msgid "The bot must pump up its tire."
+msgstr "El bot tiene que hinchar la rueda."
+
+msgid "You had an accident."
+msgstr "Has tenido un accidente."
+
+msgid "The bot had an accident."
+msgstr "El bot ha tenido un accidente."
+
+msgid "You were turned back."
+msgstr "Te han hecho dar la vuelta."
+
+msgid "The bot was turned back."
+msgstr "Han hecho dar la vuelta al bot."
+
+msgid "You were speed-limited."
+msgstr "Te han limitado la velocidad."
+
+msgid "The bot was speed-limited."
+msgstr "Han limitado la velocidad al bot."
+
+msgid "You skip a turn."
+msgstr "Te saltas un turno."
+
+msgid "The bot skips a turn."
+msgstr "El bot se salta un turno."
+
+msgid "You fell from the saddle."
+msgstr "Te has caído del caballo."
+
+msgid "The bot fell from the saddle."
+msgstr "El bot se ha caído del caballo."
+
+msgid "You must feed your horse."
+msgstr "Tienes que alimentar a tu caballo."
+
+msgid "The bot must feed its horse."
+msgstr "El bot tiene que alimentar a su caballo."
+
+msgid "You must shoe your horse."
+msgstr "Tienes que herrar a tu caballo."
+
+msgid "The bot must shoe its horse."
+msgstr "El bot tiene que herrar a su caballo."
+
+msgid "You must give your horse a rest."
+msgstr "Tienes que dejar descansar a tu caballo."
+
+msgid "The bot must give its horse a rest."
+msgstr "El bot tiene que dejar descansar a su caballo."
+
+msgid "You protected yourself from falling from the saddle."
+msgstr "Te has protegido de las caídas del caballo."
+
+msgid "The bot protected itself from falling from the saddle."
+msgstr "El bot se ha protegido de las caídas del caballo."
+
+msgid "You protected your horse from hunger."
+msgstr "Has protegido a tu caballo del hambre."
+
+msgid "The bot protected its horse from hunger."
+msgstr "El bot ha protegido a su caballo del hambre."
+
+msgid "You protected your horse from losing its horseshoe."
+msgstr "Has protegido a tu caballo de perder la herradura."
+
+msgid "The bot protected its horse from losing its horseshoe."
+msgstr "El bot ha protegido a su caballo de perder la herradura."
+
+msgid "You protected your horse from exhaustion."
+msgstr "Has protegido a tu caballo del agotamiento."
+
+msgid "The bot protected its horse from exhaustion."
+msgstr "El bot ha protegido a su caballo del agotamiento."
+
+msgid "You protected yourself from being turned back."
+msgstr "Te has protegido de la media vuelta."
+
+msgid "The bot protected itself from being turned back."
+msgstr "El bot se ha protegido de la media vuelta."
+
+msgid "You protected yourself from the speed limit."
+msgstr "Te has protegido del límite de velocidad."
+
+msgid "The bot protected itself from the speed limit."
+msgstr "El bot se ha protegido del límite de velocidad."
+
+msgid "You protected yourself from skipping a turn."
+msgstr "Te has protegido de perder el turno."
+
+msgid "The bot protected itself from skipping a turn."
+msgstr "El bot se ha protegido de perder el turno."
+
+msgid "You lost all your protections."
+msgstr "Has perdido todas tus protecciones."
+
+msgid "The bot lost all its protections."
+msgstr "El bot ha perdido todas sus protecciones."
+
+msgid "You are at the finish line. Congratulations!"
+msgstr "¡Has llegado a la meta! ¡Enhorabuena!"
+
+msgid "The bot is at the finish line."
+msgstr "El bot ha llegado a la meta."
+
+msgid "The deck ran out. Draw."
+msgstr "Se ha acabado la baraja. Empate."
+
+msgid "%{d} miles. You can move."
+msgstr "%{d} millas. Puedes moverte."
+
+msgid "%{d} miles. You cannot move: %{reasons}."
+msgstr "%{d} millas. No puedes moverte: %{reasons}."
+
+msgid "You can move."
+msgstr "Puedes moverte."
+
+msgid "Engine stalled"
+msgstr "Motor calado"
+
+msgid "Fuel drained"
+msgstr "Depósito vaciado"
+
+msgid "Tire flat"
+msgstr "Rueda pinchada"
+
+msgid "In an accident"
+msgstr "En accidente"
+
+msgid "Speed limited"
+msgstr "Velocidad limitada"
+
+msgid "Turned back"
+msgstr "Mirando hacia atrás"
+
+msgid "The bot is thinking..."
+msgstr "El bot está pensando..."
+
+msgid "End the game?"
+msgstr "¿Terminar la partida?"
+
+msgid "No moves yet."
+msgstr "Todavía no hay jugadas."
+
+msgid "No game in progress."
+msgstr "No hay ninguna partida en curso."
+
+msgid "Cannot display the status."
+msgstr "No se puede mostrar el estado."
+
+msgid "The goal is to be the first to cover the target distance exactly, without overshooting."
+msgstr "El objetivo es ser el primero en recorrer exactamente la distancia objetivo, sin pasarse."
+
+msgid "Distance cards (25/50/75/100/200 miles) move you forward once your car is started and nothing blocks it."
+msgstr "Las cartas de distancia (25/50/75/100/200 millas) te hacen avanzar si tu coche está arrancado y nada lo bloquea."
+
+msgid "Hazard cards are played against an opponent: stall the engine, empty the tank, flat tire, accident, U-turn, speed limit, skip a turn."
+msgstr "Las cartas de obstáculo se juegan contra un rival: calar el motor, vaciar el depósito, pinchar la rueda, accidente, media vuelta, límite de velocidad, saltarse un turno."
+
+msgid "Remedy cards fix your own car: start the engine, refuel, fix the tire, repair after accident, end of U-turn, end of speed limit."
+msgstr "Las cartas de reparación arreglan tu propio coche: arrancar el motor, repostar, arreglar la rueda, reparar tras el accidente, fin de la media vuelta, fin del límite de velocidad."
+
+msgid "Safety cards are played on yourself once and permanently block one kind of hazard. Playing one for the first time keeps your turn."
+msgstr "Las cartas de protección se juegan sobre ti una sola vez y bloquean para siempre un tipo de obstáculo. Si juegas una por primera vez, conservas el turno."
+
+msgid "If a card can't take effect (for example, refueling a full tank), it is simply discarded and the turn passes on."
+msgstr "Si una carta no puede surtir efecto (por ejemplo, repostar con el depósito lleno), se descarta y el turno pasa al siguiente."
+
+msgid "During the game: F2 — the last move, F4 — your distance and whether you can move. Escape — end the game."
+msgstr "Durante la partida: F2 — la última jugada, F4 — tu distancia y si puedes moverte. Escape — terminar la partida."
+
+msgid "25 miles"
+msgstr "25 millas"
+
+msgid "50 miles"
+msgstr "50 millas"
+
+msgid "75 miles"
+msgstr "75 millas"
+
+msgid "100 miles"
+msgstr "100 millas"
+
+msgid "200 miles"
+msgstr "200 millas"
+
+msgid "Stall the engine"
+msgstr "Calar el motor"
+
+msgid "Empty the tank"
+msgstr "Vaciar el depósito"
+
+msgid "Flat tire"
+msgstr "Pinchar la rueda"
+
+msgid "Accident"
+msgstr "Accidente"
+
+msgid "U-turn"
+msgstr "Hacer dar la vuelta"
+
+msgid "Speed limit"
+msgstr "Limitar la velocidad"
+
+msgid "Skip a turn"
+msgstr "Saltarse un turno"
+
+msgid "Start the engine"
+msgstr "Arrancar el motor"
+
+msgid "Refuel"
+msgstr "Repostar"
+
+msgid "Fix the tire"
+msgstr "Arreglar la rueda"
+
+msgid "Repair after accident"
+msgstr "Reparar tras el accidente"
+
+msgid "End of U-turn"
+msgstr "Volver a mirar hacia adelante"
+
+msgid "End of speed limit"
+msgstr "Quitar el límite de velocidad"
+
+msgid "Engine immunity"
+msgstr "Protección contra el motor calado"
+
+msgid "Fuel immunity"
+msgstr "Protección contra el depósito vacío"
+
+msgid "Tire immunity"
+msgstr "Protección contra los pinchazos"
+
+msgid "Accident immunity"
+msgstr "Protección contra accidentes"
+
+msgid "U-turn immunity"
+msgstr "Protección contra la media vuelta"
+
+msgid "Speed limit immunity"
+msgstr "Protección contra el límite de velocidad"
+
+msgid "Turn-skip immunity"
+msgstr "Protección contra perder el turno"
+
+msgid "Strip all immunities"
+msgstr "Quitar todas las protecciones"
+
+msgid "Thrown from the saddle"
+msgstr "Caerse del caballo"
+
+msgid "Hunger"
+msgstr "Hambre"
+
+msgid "Lost horseshoe"
+msgstr "Perder la herradura"
+
+msgid "Exhaustion"
+msgstr "Agotamiento"
+
+msgid "Saddle up"
+msgstr "Ensillar"
+
+msgid "Feed"
+msgstr "Alimentar"
+
+msgid "Shoe the horse"
+msgstr "Herrar"
+
+msgid "Rest"
+msgstr "Descansar"
+
+msgid "Saddle immunity"
+msgstr "Protección contra caídas"
+
+msgid "Hunger immunity"
+msgstr "Protección contra el hambre"
+
+msgid "Horseshoe immunity"
+msgstr "Protección contra la pérdida de herradura"
+
+msgid "Exhaustion immunity"
+msgstr "Protección contra el agotamiento"
+
+msgid "Multiplayer"
+msgstr "Multijugador"
+
+msgid "Create a game"
+msgstr "Crear una partida"
+
+msgid "Wait for an invitation"
+msgstr "Esperar una invitación"
+
+msgid "Back"
+msgstr "Atrás"
+
+msgid "Opponent nickname"
+msgstr "Apodo del rival"
+
+msgid "Cannot verify the user. Check the connection."
+msgstr "No se puede verificar al usuario. Comprueba la conexión."
+
+msgid "There is no user with this name."
+msgstr "No hay ningún usuario con ese nombre."
+
+msgid "The user is offline. Send the invitation anyway?"
+msgstr "El usuario está desconectado. ¿Enviar la invitación de todos modos?"
+
+msgid "No response from %{nick}."
+msgstr "Sin respuesta de %{nick}."
+
+msgid "%{nick} declined the invitation."
+msgstr "%{nick} ha rechazado la invitación."
+
+msgid "Cancel waiting?"
+msgstr "¿Cancelar la espera?"
+
+msgid "Exit waiting for invitations?"
+msgstr "¿Salir de la espera de invitaciones?"
+
+msgid "%{nick} invites you: %{settings}. Accept?"
+msgstr "%{nick} te invita: %{settings}. ¿Aceptar?"
+
+msgid "Cancel waiting for the start?"
+msgstr "¿Cancelar la espera del inicio?"
+
+msgid "The game is out of sync. Return to the menu."
+msgstr "La partida está desincronizada. Volver al menú."
+
+msgid "By fate's will, %{nick} moves first."
+msgstr "Por voluntad del destino, %{nick} empieza."
+
+msgid "The game is over."
+msgstr "La partida ha terminado."
+
+msgid "%{nick} is at the finish line."
+msgstr "%{nick} ha llegado a la meta."
+
+msgid "The bot"
+msgstr "El bot"
+
+msgid "Cannot connect to the multiplayer server."
+msgstr "No se puede conectar con el servidor multijugador."
+
+msgid "Cannot invite %{nick}."
+msgstr "No se puede invitar a %{nick}."
+
+msgid "Cannot accept the invitation."
+msgstr "No se puede aceptar la invitación."

@@ -93,10 +93,10 @@ msgstr "Dobrałeś: %{card}."
 msgid "The bot drew %{card}."
 msgstr "Bot dobrał: %{card}."
 
-msgid "You started your car."
+msgid "You started the engine."
 msgstr "Uruchomiłeś silnik."
 
-msgid "The bot started its engine."
+msgid "The bot started the engine."
 msgstr "Bot uruchomił silnik."
 
 msgid "You refueled."
@@ -111,10 +111,10 @@ msgstr "Naprawiłeś oponę."
 msgid "The bot fixed the tire."
 msgstr "Bot naprawił oponę."
 
-msgid "You repaired your car."
+msgid "You repaired the car."
 msgstr "Naprawiłeś samochód."
 
-msgid "The bot repaired its car."
+msgid "The bot repaired the car."
 msgstr "Bot naprawił samochód."
 
 msgid "You turned forward."
@@ -174,53 +174,155 @@ msgstr "Odrzuciłeś %{card}."
 msgid "The bot discarded %{card}."
 msgstr "Bot odrzucił %{card}."
 
-msgid "You stalled the bot's engine."
-msgstr "Zgasiłeś silnik botowi."
+msgid "You galloped %{miles}."
+msgstr "Przejechałeś galopem %{miles}."
 
-msgid "The bot stalled your engine."
-msgstr "Bot zgasił ci silnik."
+msgid "The bot galloped %{miles}."
+msgstr "Bot przejechał galopem %{miles}."
 
-msgid "You drained the bot's tank."
-msgstr "Opróżniłeś bak botowi."
+msgid "You galloped back %{miles}."
+msgstr "Przejechałeś galopem %{miles} do tyłu."
 
-msgid "The bot drained your tank."
-msgstr "Bot opróżnił ci bak."
+msgid "The bot galloped back %{miles}."
+msgstr "Bot przejechał galopem %{miles} do tyłu."
 
-msgid "You gave the bot a flat tire."
-msgstr "Przebiłeś oponę botowi."
+msgid "You saddled up."
+msgstr "Osiodłałeś konia."
 
-msgid "The bot gave you a flat tire."
-msgstr "Bot przebił ci oponę."
+msgid "The bot saddled up."
+msgstr "Bot osiodłał konia."
 
-msgid "You crashed the bot."
-msgstr "Spowodowałeś wypadek bota."
+msgid "You fed the horse."
+msgstr "Nakarmiłeś konia."
 
-msgid "The bot crashed you."
-msgstr "Bot spowodował ci wypadek."
+msgid "The bot fed the horse."
+msgstr "Bot nakarmił konia."
 
-msgid "You turned the bot around."
-msgstr "Zawróciłeś bota do tyłu."
+msgid "You shod the horse."
+msgstr "Podkułeś konia."
 
-msgid "The bot turned you around."
-msgstr "Bot zawrócił cię do tyłu."
+msgid "The bot shod the horse."
+msgstr "Bot podkuł konia."
 
-msgid "You limited the bot's speed."
-msgstr "Ograniczyłeś prędkość botowi."
+msgid "You let the horse rest."
+msgstr "Dałeś koniowi odpocząć."
 
-msgid "The bot limited your speed."
-msgstr "Bot ograniczył ci prędkość."
+msgid "The bot let the horse rest."
+msgstr "Bot dał koniowi odpocząć."
 
-msgid "You made the bot skip a turn."
-msgstr "Sprawiłeś, że bot pominął kolejkę."
+msgid "You were stopped."
+msgstr "Zostałeś zatrzymany."
 
-msgid "The bot made you skip a turn."
-msgstr "Bot sprawił, że pominąłeś kolejkę."
+msgid "The bot was stopped."
+msgstr "Bot został zatrzymany."
 
-msgid "You stripped the bot's protections."
-msgstr "Zdjąłeś wszystkie ochrony z bota."
+msgid "You ran out of fuel."
+msgstr "Zabrakło ci paliwa."
 
-msgid "The bot stripped your protections."
-msgstr "Bot zdjął z ciebie wszystkie ochrony."
+msgid "The bot ran out of fuel."
+msgstr "Botowi zabrakło paliwa."
+
+msgid "You must pump up your tire."
+msgstr "Musisz napompować oponę."
+
+msgid "The bot must pump up its tire."
+msgstr "Bot musi napompować oponę."
+
+msgid "You had an accident."
+msgstr "Miałeś wypadek."
+
+msgid "The bot had an accident."
+msgstr "Bot miał wypadek."
+
+msgid "You were turned back."
+msgstr "Zostałeś zawrócony."
+
+msgid "The bot was turned back."
+msgstr "Bot został zawrócony."
+
+msgid "You were speed-limited."
+msgstr "Ograniczono ci prędkość."
+
+msgid "The bot was speed-limited."
+msgstr "Botowi ograniczono prędkość."
+
+msgid "You skip a turn."
+msgstr "Opuszczasz turę."
+
+msgid "The bot skips a turn."
+msgstr "Bot opuszcza turę."
+
+msgid "You fell from the saddle."
+msgstr "Spadłeś z siodła."
+
+msgid "The bot fell from the saddle."
+msgstr "Bot spadł z siodła."
+
+msgid "You must feed your horse."
+msgstr "Musisz nakarmić konia."
+
+msgid "The bot must feed its horse."
+msgstr "Bot musi nakarmić konia."
+
+msgid "You must shoe your horse."
+msgstr "Musisz podkuć konia."
+
+msgid "The bot must shoe its horse."
+msgstr "Bot musi podkuć konia."
+
+msgid "You must give your horse a rest."
+msgstr "Musisz dać koniowi odpocząć."
+
+msgid "The bot must give its horse a rest."
+msgstr "Bot musi dać koniowi odpocząć."
+
+msgid "You protected yourself from falling from the saddle."
+msgstr "Ochroniłeś się przed upadkiem z siodła."
+
+msgid "The bot protected itself from falling from the saddle."
+msgstr "Bot ochronił się przed upadkiem z siodła."
+
+msgid "You protected your horse from hunger."
+msgstr "Ochroniłeś konia przed głodem."
+
+msgid "The bot protected its horse from hunger."
+msgstr "Bot ochronił konia przed głodem."
+
+msgid "You protected your horse from losing its horseshoe."
+msgstr "Ochroniłeś konia przed zgubieniem podkowy."
+
+msgid "The bot protected its horse from losing its horseshoe."
+msgstr "Bot ochronił konia przed zgubieniem podkowy."
+
+msgid "You protected your horse from exhaustion."
+msgstr "Ochroniłeś konia przed wyczerpaniem."
+
+msgid "The bot protected its horse from exhaustion."
+msgstr "Bot ochronił konia przed wyczerpaniem."
+
+msgid "You protected yourself from being turned back."
+msgstr "Ochroniłeś się przed zawróceniem."
+
+msgid "The bot protected itself from being turned back."
+msgstr "Bot ochronił się przed zawróceniem."
+
+msgid "You protected yourself from the speed limit."
+msgstr "Ochroniłeś się przed ograniczeniem prędkości."
+
+msgid "The bot protected itself from the speed limit."
+msgstr "Bot ochronił się przed ograniczeniem prędkości."
+
+msgid "You protected yourself from skipping a turn."
+msgstr "Ochroniłeś się przed opuszczeniem tury."
+
+msgid "The bot protected itself from skipping a turn."
+msgstr "Bot ochronił się przed opuszczeniem tury."
+
+msgid "You lost all your protections."
+msgstr "Straciłeś wszystkie ochrony."
+
+msgid "The bot lost all its protections."
+msgstr "Bot stracił wszystkie ochrony."
 
 msgid "You are at the finish line. Congratulations!"
 msgstr "Jesteś na mecie. Gratulacje!"
@@ -464,3 +566,12 @@ msgstr "%{nick} jest na mecie."
 
 msgid "The bot"
 msgstr "Bot"
+
+msgid "Cannot connect to the multiplayer server."
+msgstr "Nie można połączyć się z serwerem multiplayer."
+
+msgid "Cannot invite %{nick}."
+msgstr "Nie można zaprosić %{nick}."
+
+msgid "Cannot accept the invitation."
+msgstr "Nie można przyjąć zaproszenia."

@@ -566,3 +566,12 @@ msgstr "%{nick} на финише."
 
 msgid "The bot"
 msgstr "Бот"
+
+msgid "Cannot connect to the multiplayer server."
+msgstr "Не удалось подключиться к серверу мультиплеера."
+
+msgid "Cannot invite %{nick}."
+msgstr "Не удалось пригласить %{nick}."
+
+msgid "Cannot accept the invitation."
+msgstr "Не удалось принять приглашение."

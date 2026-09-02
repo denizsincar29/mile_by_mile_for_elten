@@ -1,0 +1,577 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MileByMile 1.1\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: tr\n"
+
+msgid "Mile by Mile"
+msgstr "Mil mil"
+
+msgid "Play against the bot"
+msgstr "Bota karşı oyna"
+
+msgid "Rules"
+msgstr "Kurallar"
+
+msgid "Exit"
+msgstr "Çıkış"
+
+msgid "Settings"
+msgstr "Ayarlar"
+
+msgid "Card set"
+msgstr "Kart destesi"
+
+msgid "Distance"
+msgstr "Mesafe"
+
+msgid "Number of decks"
+msgstr "Deste sayısı"
+
+msgid "Each player has their own deck"
+msgstr "Her oyuncunun kendi destesi vardır"
+
+msgid "1 common deck"
+msgstr "1 ortak deste"
+
+msgid "2 common decks"
+msgstr "2 ortak deste"
+
+msgid "3 common decks"
+msgstr "3 ortak deste"
+
+msgid "4 common decks"
+msgstr "4 ortak deste"
+
+msgid "5 common decks"
+msgstr "5 ortak deste"
+
+msgid "OK"
+msgstr "Tamam"
+
+msgid "Cancel"
+msgstr "Vazgeç"
+
+msgid "On cars"
+msgstr "Arabalarla"
+
+msgid "On horses"
+msgstr "Atlarla"
+
+msgid "%{d} miles"
+msgstr "%{d} mil"
+
+msgid "Let's go!"
+msgstr "Hadi başlayalım!"
+
+msgid "By fate's will, you move first."
+msgstr "Kaderin dediği oldu: ilk hamle senin."
+
+msgid "By fate's will, the bot moves first."
+msgstr "Kaderin dediği oldu: ilk hamle botun."
+
+msgid "Your turn"
+msgstr "Sıra sende"
+
+msgid "Your turn."
+msgstr "Sıra sende."
+
+msgid "The bot moves."
+msgstr "Sıra botta."
+
+msgid "You"
+msgstr "Sen"
+
+msgid "Bot"
+msgstr "Bot"
+
+msgid "You drew %{card}."
+msgstr "%{card} kartını çektin."
+
+msgid "The bot drew %{card}."
+msgstr "Bot %{card} kartını çekti."
+
+msgid "You started the engine."
+msgstr "Motoru çalıştırdın."
+
+msgid "The bot started the engine."
+msgstr "Bot motoru çalıştırdı."
+
+msgid "You refueled."
+msgstr "Yakıt aldın."
+
+msgid "The bot refueled."
+msgstr "Bot yakıt aldı."
+
+msgid "You fixed the tire."
+msgstr "Lastiği tamir ettin."
+
+msgid "The bot fixed the tire."
+msgstr "Bot lastiği tamir etti."
+
+msgid "You repaired the car."
+msgstr "Arabayı tamir ettin."
+
+msgid "The bot repaired the car."
+msgstr "Bot arabayı tamir etti."
+
+msgid "You turned forward."
+msgstr "Yeniden ileri döndün."
+
+msgid "The bot turned forward."
+msgstr "Bot yeniden ileri döndü."
+
+msgid "You removed the speed limit."
+msgstr "Hız limitini kaldırdın."
+
+msgid "The bot removed the speed limit."
+msgstr "Bot hız limitini kaldırdı."
+
+msgid "You protected yourself from %{hazard}."
+msgstr "Kendini %{hazard} korudun."
+
+msgid "The bot protected itself from %{hazard}."
+msgstr "Bot kendini %{hazard} korudu."
+
+msgid "engine stalling"
+msgstr "motor arızasından"
+
+msgid "fuel draining"
+msgstr "depo boşaltılmasından"
+
+msgid "a flat tire"
+msgstr "lastik patlamasından"
+
+msgid "an accident"
+msgstr "kazadan"
+
+msgid "being turned around"
+msgstr "geri dönüşten"
+
+msgid "the speed limit"
+msgstr "hız limitinden"
+
+msgid "skipping a turn"
+msgstr "sıra kaybetmekten"
+
+msgid "You drove %{miles}."
+msgstr "%{miles} ilerledin."
+
+msgid "The bot drove %{miles}."
+msgstr "Bot %{miles} ilerledi."
+
+msgid "You drove back %{miles}."
+msgstr "Geriye %{miles} sürdün."
+
+msgid "The bot drove back %{miles}."
+msgstr "Bot geriye %{miles} sürdü."
+
+msgid "You discarded %{card}."
+msgstr "%{card} kartını attın."
+
+msgid "The bot discarded %{card}."
+msgstr "Bot %{card} kartını attı."
+
+msgid "You galloped %{miles}."
+msgstr "%{miles} dörtnala gittin."
+
+msgid "The bot galloped %{miles}."
+msgstr "Bot %{miles} dörtnala gitti."
+
+msgid "You galloped back %{miles}."
+msgstr "Geriye %{miles} dörtnala gittin."
+
+msgid "The bot galloped back %{miles}."
+msgstr "Bot geriye %{miles} dörtnala gitti."
+
+msgid "You saddled up."
+msgstr "Atı eyerledin."
+
+msgid "The bot saddled up."
+msgstr "Bot atı eyerledi."
+
+msgid "You fed the horse."
+msgstr "Ata yem verdin."
+
+msgid "The bot fed the horse."
+msgstr "Bot ata yem verdi."
+
+msgid "You shod the horse."
+msgstr "Atı nalladın."
+
+msgid "The bot shod the horse."
+msgstr "Bot atı nalladı."
+
+msgid "You let the horse rest."
+msgstr "Atı dinlendirdin."
+
+msgid "The bot let the horse rest."
+msgstr "Bot atı dinlendirdi."
+
+msgid "You were stopped."
+msgstr "Durduruldun."
+
+msgid "The bot was stopped."
+msgstr "Bot durduruldu."
+
+msgid "You ran out of fuel."
+msgstr "Yakıtın bitti."
+
+msgid "The bot ran out of fuel."
+msgstr "Botun yakıtı bitti."
+
+msgid "You must pump up your tire."
+msgstr "Lastiğini şişirmen gerek."
+
+msgid "The bot must pump up its tire."
+msgstr "Botun lastiğini şişirmesi gerek."
+
+msgid "You had an accident."
+msgstr "Kaza geçirdin."
+
+msgid "The bot had an accident."
+msgstr "Bot kaza geçirdi."
+
+msgid "You were turned back."
+msgstr "Geri dönmeye zorlandın."
+
+msgid "The bot was turned back."
+msgstr "Bot geri dönmeye zorlandı."
+
+msgid "You were speed-limited."
+msgstr "Hızın sınırlandı."
+
+msgid "The bot was speed-limited."
+msgstr "Botun hızı sınırlandı."
+
+msgid "You skip a turn."
+msgstr "Bir sıra kaybediyorsun."
+
+msgid "The bot skips a turn."
+msgstr "Bot bir sıra kaybediyor."
+
+msgid "You fell from the saddle."
+msgstr "Eyerden düştün."
+
+msgid "The bot fell from the saddle."
+msgstr "Bot eyerden düştü."
+
+msgid "You must feed your horse."
+msgstr "Atını yemlemen gerek."
+
+msgid "The bot must feed its horse."
+msgstr "Botun atını yemlemesi gerek."
+
+msgid "You must shoe your horse."
+msgstr "Atını nallaman gerek."
+
+msgid "The bot must shoe its horse."
+msgstr "Botun atını nallaması gerek."
+
+msgid "You must give your horse a rest."
+msgstr "Atını dinlendirmen gerek."
+
+msgid "The bot must give its horse a rest."
+msgstr "Botun atını dinlendirmesi gerek."
+
+msgid "You protected yourself from falling from the saddle."
+msgstr "Kendini eyerden düşmeye karşı korudun."
+
+msgid "The bot protected itself from falling from the saddle."
+msgstr "Bot kendini eyerden düşmeye karşı korudu."
+
+msgid "You protected your horse from hunger."
+msgstr "Atını açlığa karşı korudun."
+
+msgid "The bot protected its horse from hunger."
+msgstr "Bot atını açlığa karşı korudu."
+
+msgid "You protected your horse from losing its horseshoe."
+msgstr "Atını nal kaybına karşı korudun."
+
+msgid "The bot protected its horse from losing its horseshoe."
+msgstr "Bot atını nal kaybına karşı korudu."
+
+msgid "You protected your horse from exhaustion."
+msgstr "Atını yorgunluğa karşı korudun."
+
+msgid "The bot protected its horse from exhaustion."
+msgstr "Bot atını yorgunluğa karşı korudu."
+
+msgid "You protected yourself from being turned back."
+msgstr "Kendini geri dönüşe karşı korudun."
+
+msgid "The bot protected itself from being turned back."
+msgstr "Bot kendini geri dönüşe karşı korudu."
+
+msgid "You protected yourself from the speed limit."
+msgstr "Kendini hız limitine karşı korudun."
+
+msgid "The bot protected itself from the speed limit."
+msgstr "Bot kendini hız limitine karşı korudu."
+
+msgid "You protected yourself from skipping a turn."
+msgstr "Kendini sıra kaybetmeye karşı korudun."
+
+msgid "The bot protected itself from skipping a turn."
+msgstr "Bot kendini sıra kaybetmeye karşı korudu."
+
+msgid "You lost all your protections."
+msgstr "Tüm korumalarını kaybettin."
+
+msgid "The bot lost all its protections."
+msgstr "Bot tüm korumalarını kaybetti."
+
+msgid "You are at the finish line. Congratulations!"
+msgstr "Bitiş çizgisine ulaştın. Tebrikler!"
+
+msgid "The bot is at the finish line."
+msgstr "Bot bitiş çizgisine ulaştı."
+
+msgid "The deck ran out. Draw."
+msgstr "Deste bitti. Berabere."
+
+msgid "%{d} miles. You can move."
+msgstr "%{d} mil. İlerleyebilirsin."
+
+msgid "%{d} miles. You cannot move: %{reasons}."
+msgstr "%{d} mil. İlerleyemezsin: %{reasons}."
+
+msgid "You can move."
+msgstr "İlerleyebilirsin."
+
+msgid "Engine stalled"
+msgstr "Motor arızalı"
+
+msgid "Fuel drained"
+msgstr "Depo boş"
+
+msgid "Tire flat"
+msgstr "Lastik patlak"
+
+msgid "In an accident"
+msgstr "Kaza geçirdin"
+
+msgid "Speed limited"
+msgstr "Hız sınırlı"
+
+msgid "Turned back"
+msgstr "Geri dönmüş"
+
+msgid "The bot is thinking..."
+msgstr "Bot düşünüyor..."
+
+msgid "End the game?"
+msgstr "Oyunu bitirmek istiyor musun?"
+
+msgid "No moves yet."
+msgstr "Henüz hamle yok."
+
+msgid "No game in progress."
+msgstr "Devam eden bir oyun yok."
+
+msgid "Cannot display the status."
+msgstr "Durum gösterilemiyor."
+
+msgid "The goal is to be the first to cover the target distance exactly, without overshooting."
+msgstr "Amaç, hedef mesafeyi aşmadan tam olarak ilk kat eden olmaktır."
+
+msgid "Distance cards (25/50/75/100/200 miles) move you forward once your car is started and nothing blocks it."
+msgstr "Mesafe kartları (25/50/75/100/200 mil), araban çalışır ve hiçbir şey onu engellemezse seni ilerletir."
+
+msgid "Hazard cards are played against an opponent: stall the engine, empty the tank, flat tire, accident, U-turn, speed limit, skip a turn."
+msgstr "Engel kartları rakibe oynanır: motoru durdurmak, depoyu boşaltmak, lastik patlatmak, kaza, geri dönüş, hız limiti, sıra kaybetme."
+
+msgid "Remedy cards fix your own car: start the engine, refuel, fix the tire, repair after accident, end of U-turn, end of speed limit."
+msgstr "Onarım kartları kendi arabanı tamir eder: motoru çalıştırmak, yakıt almak, lastiği tamir etmek, kazadan sonra tamir etmek, geri dönüşü bitirmek, hız limitini kaldırmak."
+
+msgid "Safety cards are played on yourself once and permanently block one kind of hazard. Playing one for the first time keeps your turn."
+msgstr "Koruma kartları kendine bir kez oynanır ve bir tür engeli kalıcı olarak bloke eder. İlk kez koruma oynarsan sıran kalmaz, sıra sende kalır."
+
+msgid "If a card can't take effect (for example, refueling a full tank), it is simply discarded and the turn passes on."
+msgstr "Bir kart etki edemiyorsa (örneğin dolu depoya yakıt almak), sadece atılır ve sıra diğerine geçer."
+
+msgid "During the game: F2 — the last move, F4 — your distance and whether you can move. Escape — end the game."
+msgstr "Oyun sırasında: F2 — son hamle, F4 — mesafen ve ilerleyip ilerleyemediğin. Esc — oyunu bitir."
+
+msgid "25 miles"
+msgstr "25 mil"
+
+msgid "50 miles"
+msgstr "50 mil"
+
+msgid "75 miles"
+msgstr "75 mil"
+
+msgid "100 miles"
+msgstr "100 mil"
+
+msgid "200 miles"
+msgstr "200 mil"
+
+msgid "Stall the engine"
+msgstr "Motoru durdur"
+
+msgid "Empty the tank"
+msgstr "Depoyu boşalt"
+
+msgid "Flat tire"
+msgstr "Lastik patlat"
+
+msgid "Accident"
+msgstr "Kaza"
+
+msgid "U-turn"
+msgstr "Geri dönmeye zorla"
+
+msgid "Speed limit"
+msgstr "Hızı sınırla"
+
+msgid "Skip a turn"
+msgstr "Sıra kaybettir"
+
+msgid "Start the engine"
+msgstr "Motoru çalıştır"
+
+msgid "Refuel"
+msgstr "Yakıt al"
+
+msgid "Fix the tire"
+msgstr "Lastiği tamir et"
+
+msgid "Repair after accident"
+msgstr "Kazadan sonra tamir et"
+
+msgid "End of U-turn"
+msgstr "Yeniden ileri dön"
+
+msgid "End of speed limit"
+msgstr "Hız limitini kaldır"
+
+msgid "Engine immunity"
+msgstr "Motor arızasına karşı koruma"
+
+msgid "Fuel immunity"
+msgstr "Yakıt boşaltmaya karşı koruma"
+
+msgid "Tire immunity"
+msgstr "Lastik patlamaya karşı koruma"
+
+msgid "Accident immunity"
+msgstr "Kazalara karşı koruma"
+
+msgid "U-turn immunity"
+msgstr "Geri dönüşe karşı koruma"
+
+msgid "Speed limit immunity"
+msgstr "Hız limitine karşı koruma"
+
+msgid "Turn-skip immunity"
+msgstr "Sıra kaybetmeye karşı koruma"
+
+msgid "Strip all immunities"
+msgstr "Tüm korumaları kaldır"
+
+msgid "Thrown from the saddle"
+msgstr "Eyerden düşür"
+
+msgid "Hunger"
+msgstr "Açlık"
+
+msgid "Lost horseshoe"
+msgstr "Nal kaybet"
+
+msgid "Exhaustion"
+msgstr "Yorgunluk"
+
+msgid "Saddle up"
+msgstr "Eyere bin"
+
+msgid "Feed"
+msgstr "Yem ver"
+
+msgid "Shoe the horse"
+msgstr "Atı nalla"
+
+msgid "Rest"
+msgstr "Dinlendir"
+
+msgid "Saddle immunity"
+msgstr "Düşmeye karşı koruma"
+
+msgid "Hunger immunity"
+msgstr "Açlığa karşı koruma"
+
+msgid "Horseshoe immunity"
+msgstr "Nal kaybına karşı koruma"
+
+msgid "Exhaustion immunity"
+msgstr "Yorgunluğa karşı koruma"
+
+msgid "Multiplayer"
+msgstr "Çok oyunculu"
+
+msgid "Create a game"
+msgstr "Oyun oluştur"
+
+msgid "Wait for an invitation"
+msgstr "Davet bekle"
+
+msgid "Back"
+msgstr "Geri"
+
+msgid "Opponent nickname"
+msgstr "Rakibin kullanıcı adı"
+
+msgid "Cannot verify the user. Check the connection."
+msgstr "Kullanıcı doğrulanamıyor. Bağlantıyı kontrol et."
+
+msgid "There is no user with this name."
+msgstr "Bu isimde bir kullanıcı yok."
+
+msgid "The user is offline. Send the invitation anyway?"
+msgstr "Kullanıcı çevrimdışı. Yine de davet gönderilsin mi?"
+
+msgid "No response from %{nick}."
+msgstr "%{nick} yanıt vermedi."
+
+msgid "%{nick} declined the invitation."
+msgstr "%{nick} daveti reddetti."
+
+msgid "Cancel waiting?"
+msgstr "Bekleme iptal edilsin mi?"
+
+msgid "Exit waiting for invitations?"
+msgstr "Davet beklemekten çıkılsın mı?"
+
+msgid "%{nick} invites you: %{settings}. Accept?"
+msgstr "%{nick} seni davet ediyor: %{settings}. Kabul ediyor musun?"
+
+msgid "Cancel waiting for the start?"
+msgstr "Başlangıç beklemek iptal edilsin mi?"
+
+msgid "The game is out of sync. Return to the menu."
+msgstr "Oyun eşzamanlama dışı. Menüye dönülüyor."
+
+msgid "By fate's will, %{nick} moves first."
+msgstr "Kaderin dediği oldu: ilk hamle %{nick}'in."
+
+msgid "The game is over."
+msgstr "Oyun bitti."
+
+msgid "%{nick} is at the finish line."
+msgstr "%{nick} bitiş çizgisine ulaştı."
+
+msgid "The bot"
+msgstr "Bot"
+
+msgid "Cannot connect to the multiplayer server."
+msgstr "Çok oyunculu sunucusuna bağlanılamıyor."
+
+msgid "Cannot invite %{nick}."
+msgstr "%{nick} davet edilemiyor."
+
+msgid "Cannot accept the invitation."
+msgstr "Davet kabul edilemiyor."

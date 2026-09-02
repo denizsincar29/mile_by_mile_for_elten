@@ -1,0 +1,577 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MileByMile 1.1\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: uk\n"
+
+msgid "Mile by Mile"
+msgstr "Миля за милею"
+
+msgid "Play against the bot"
+msgstr "Грати проти бота"
+
+msgid "Rules"
+msgstr "Правила"
+
+msgid "Exit"
+msgstr "Вихід"
+
+msgid "Settings"
+msgstr "Налаштування"
+
+msgid "Card set"
+msgstr "Набір карток"
+
+msgid "Distance"
+msgstr "Дистанція"
+
+msgid "Number of decks"
+msgstr "Кількість колод"
+
+msgid "Each player has their own deck"
+msgstr "У кожного гравця своя колода"
+
+msgid "1 common deck"
+msgstr "1 спільна колода"
+
+msgid "2 common decks"
+msgstr "2 спільні колоди"
+
+msgid "3 common decks"
+msgstr "3 спільні колоди"
+
+msgid "4 common decks"
+msgstr "4 спільні колоди"
+
+msgid "5 common decks"
+msgstr "5 спільних колод"
+
+msgid "OK"
+msgstr "ОК"
+
+msgid "Cancel"
+msgstr "Скасувати"
+
+msgid "On cars"
+msgstr "На машинах"
+
+msgid "On horses"
+msgstr "На конях"
+
+msgid "%{d} miles"
+msgstr "%{d} миль"
+
+msgid "Let's go!"
+msgstr "Поїхали!"
+
+msgid "By fate's will, you move first."
+msgstr "Волею долі першим ходите ви."
+
+msgid "By fate's will, the bot moves first."
+msgstr "Волею долі першим ходить бот."
+
+msgid "Your turn"
+msgstr "Ваш хід"
+
+msgid "Your turn."
+msgstr "Ваш хід."
+
+msgid "The bot moves."
+msgstr "Ходить бот."
+
+msgid "You"
+msgstr "Ви"
+
+msgid "Bot"
+msgstr "Бот"
+
+msgid "You drew %{card}."
+msgstr "Ви взяли %{card}."
+
+msgid "The bot drew %{card}."
+msgstr "Бот узяв %{card}."
+
+msgid "You started the engine."
+msgstr "Ви завели мотор."
+
+msgid "The bot started the engine."
+msgstr "Бот завів мотор."
+
+msgid "You refueled."
+msgstr "Ви налили бензин."
+
+msgid "The bot refueled."
+msgstr "Бот налив бензин."
+
+msgid "You fixed the tire."
+msgstr "Ви накачали колесо."
+
+msgid "The bot fixed the tire."
+msgstr "Бот накачав колесо."
+
+msgid "You repaired the car."
+msgstr "Ви полагодили машину."
+
+msgid "The bot repaired the car."
+msgstr "Бот полагодив машину."
+
+msgid "You turned forward."
+msgstr "Ви розвернулися вперед."
+
+msgid "The bot turned forward."
+msgstr "Бот розвернувся вперед."
+
+msgid "You removed the speed limit."
+msgstr "Ви прибрали обмеження швидкості."
+
+msgid "The bot removed the speed limit."
+msgstr "Бот прибрав обмеження швидкості."
+
+msgid "You protected yourself from %{hazard}."
+msgstr "Ви захистилися від %{hazard}."
+
+msgid "The bot protected itself from %{hazard}."
+msgstr "Бот захистився від %{hazard}."
+
+msgid "engine stalling"
+msgstr "глушіння мотора"
+
+msgid "fuel draining"
+msgstr "зливу бензину"
+
+msgid "a flat tire"
+msgstr "проколу коліс"
+
+msgid "an accident"
+msgstr "аварії"
+
+msgid "being turned around"
+msgstr "розвороту"
+
+msgid "the speed limit"
+msgstr "обмеження швидкості"
+
+msgid "skipping a turn"
+msgstr "пропуску ходу"
+
+msgid "You drove %{miles}."
+msgstr "Ви проїхали %{miles}."
+
+msgid "The bot drove %{miles}."
+msgstr "Бот проїхав %{miles}."
+
+msgid "You drove back %{miles}."
+msgstr "Ви проїхали назад %{miles}."
+
+msgid "The bot drove back %{miles}."
+msgstr "Бот проїхав назад %{miles}."
+
+msgid "You discarded %{card}."
+msgstr "Ви скинули %{card}."
+
+msgid "The bot discarded %{card}."
+msgstr "Бот скинув %{card}."
+
+msgid "You galloped %{miles}."
+msgstr "Ви проскакали %{miles}."
+
+msgid "The bot galloped %{miles}."
+msgstr "Бот проскакав %{miles}."
+
+msgid "You galloped back %{miles}."
+msgstr "Ви проскакали назад %{miles}."
+
+msgid "The bot galloped back %{miles}."
+msgstr "Бот проскакав назад %{miles}."
+
+msgid "You saddled up."
+msgstr "Ви осідлали коня."
+
+msgid "The bot saddled up."
+msgstr "Бот осідлав коня."
+
+msgid "You fed the horse."
+msgstr "Ви нагодували коня."
+
+msgid "The bot fed the horse."
+msgstr "Бот нагодував коня."
+
+msgid "You shod the horse."
+msgstr "Ви підкували коня."
+
+msgid "The bot shod the horse."
+msgstr "Бот підкував коня."
+
+msgid "You let the horse rest."
+msgstr "Ви дали коню відпочити."
+
+msgid "The bot let the horse rest."
+msgstr "Бот дав коню відпочити."
+
+msgid "You were stopped."
+msgstr "Вас зупинили."
+
+msgid "The bot was stopped."
+msgstr "Бота зупинили."
+
+msgid "You ran out of fuel."
+msgstr "У вас закінчився бензин."
+
+msgid "The bot ran out of fuel."
+msgstr "У бота закінчився бензин."
+
+msgid "You must pump up your tire."
+msgstr "Ви повинні накачати колесо."
+
+msgid "The bot must pump up its tire."
+msgstr "Бот повинен накачати колесо."
+
+msgid "You had an accident."
+msgstr "Ви потрапили в аварію."
+
+msgid "The bot had an accident."
+msgstr "Бот потрапив в аварію."
+
+msgid "You were turned back."
+msgstr "Вас розвернули назад."
+
+msgid "The bot was turned back."
+msgstr "Бота розвернули назад."
+
+msgid "You were speed-limited."
+msgstr "Вас обмежили в швидкості."
+
+msgid "The bot was speed-limited."
+msgstr "Бота обмежили в швидкості."
+
+msgid "You skip a turn."
+msgstr "Ви пропускаєте хід."
+
+msgid "The bot skips a turn."
+msgstr "Бот пропускає хід."
+
+msgid "You fell from the saddle."
+msgstr "Ви впали з сідла."
+
+msgid "The bot fell from the saddle."
+msgstr "Бот упав з сідла."
+
+msgid "You must feed your horse."
+msgstr "Ви повинні нагодувати коня."
+
+msgid "The bot must feed its horse."
+msgstr "Бот повинен нагодувати коня."
+
+msgid "You must shoe your horse."
+msgstr "Ви повинні підкувати коня."
+
+msgid "The bot must shoe its horse."
+msgstr "Бот повинен підкувати коня."
+
+msgid "You must give your horse a rest."
+msgstr "Ви повинні дати коню відпочити."
+
+msgid "The bot must give its horse a rest."
+msgstr "Бот повинен дати коню відпочити."
+
+msgid "You protected yourself from falling from the saddle."
+msgstr "Ви захистилися від падінь із сідла."
+
+msgid "The bot protected itself from falling from the saddle."
+msgstr "Бот захистився від падінь із сідла."
+
+msgid "You protected your horse from hunger."
+msgstr "Ви захистили коня від голоду."
+
+msgid "The bot protected its horse from hunger."
+msgstr "Бот захистив коня від голоду."
+
+msgid "You protected your horse from losing its horseshoe."
+msgstr "Ви захистили коня від втрати підкови."
+
+msgid "The bot protected its horse from losing its horseshoe."
+msgstr "Бот захистив коня від втрати підкови."
+
+msgid "You protected your horse from exhaustion."
+msgstr "Ви захистили коня від виснаження."
+
+msgid "The bot protected its horse from exhaustion."
+msgstr "Бот захистив коня від виснаження."
+
+msgid "You protected yourself from being turned back."
+msgstr "Ви захистилися від розвороту."
+
+msgid "The bot protected itself from being turned back."
+msgstr "Бот захистився від розвороту."
+
+msgid "You protected yourself from the speed limit."
+msgstr "Ви захистилися від обмеження швидкості."
+
+msgid "The bot protected itself from the speed limit."
+msgstr "Бот захистився від обмеження швидкості."
+
+msgid "You protected yourself from skipping a turn."
+msgstr "Ви захистилися від пропуску ходу."
+
+msgid "The bot protected itself from skipping a turn."
+msgstr "Бот захистився від пропуску ходу."
+
+msgid "You lost all your protections."
+msgstr "Ви втратили всі захисти."
+
+msgid "The bot lost all its protections."
+msgstr "Бот втратив усі захисти."
+
+msgid "You are at the finish line. Congratulations!"
+msgstr "Ви на фініші. Вітаємо!"
+
+msgid "The bot is at the finish line."
+msgstr "Бот на фініші."
+
+msgid "The deck ran out. Draw."
+msgstr "Колода закінчилася. Нічия."
+
+msgid "%{d} miles. You can move."
+msgstr "%{d} миль. Можна їхати."
+
+msgid "%{d} miles. You cannot move: %{reasons}."
+msgstr "%{d} миль. Їхати не можна: %{reasons}."
+
+msgid "You can move."
+msgstr "Можна їхати."
+
+msgid "Engine stalled"
+msgstr "Мотор заглушений"
+
+msgid "Fuel drained"
+msgstr "Бензин злитий"
+
+msgid "Tire flat"
+msgstr "Колесо проколоте"
+
+msgid "In an accident"
+msgstr "В аварії"
+
+msgid "Speed limited"
+msgstr "Швидкість обмежена"
+
+msgid "Turned back"
+msgstr "Напрямок назад"
+
+msgid "The bot is thinking..."
+msgstr "Бот думає..."
+
+msgid "End the game?"
+msgstr "Закінчити гру?"
+
+msgid "No moves yet."
+msgstr "Ходів ще не було."
+
+msgid "No game in progress."
+msgstr "Гра ще не почалася."
+
+msgid "Cannot display the status."
+msgstr "Не можу показати статус."
+
+msgid "The goal is to be the first to cover the target distance exactly, without overshooting."
+msgstr "Мета — першим проїхати задану дистанцію рівно, без перевищення."
+
+msgid "Distance cards (25/50/75/100/200 miles) move you forward once your car is started and nothing blocks it."
+msgstr "Картки руху (25/50/75/100/200 миль) їдуть уперед, якщо машина заведена і нічого не заважає."
+
+msgid "Hazard cards are played against an opponent: stall the engine, empty the tank, flat tire, accident, U-turn, speed limit, skip a turn."
+msgstr "Картки перешкод граються на суперника: заглушити мотор, злити бензин, проколоти шину, аварія, розворот назад, обмеження швидкості, пропуск ходу."
+
+msgid "Remedy cards fix your own car: start the engine, refuel, fix the tire, repair after accident, end of U-turn, end of speed limit."
+msgstr "Картки протидії лагодять вашу машину: завестися, налити бензин, накачати колесо, полагодитися після аварії, кінець розвороту, зняття обмеження швидкості."
+
+msgid "Safety cards are played on yourself once and permanently block one kind of hazard. Playing one for the first time keeps your turn."
+msgstr "Картки захисту ставляться на себе один раз і назавжди блокують один вид перешкод. Якщо ви граєте такий захист уперше — хід залишається у вас."
+
+msgid "If a card can't take effect (for example, refueling a full tank), it is simply discarded and the turn passes on."
+msgstr "Якщо картка не може подіяти (наприклад, ви заливаєте бензин у повний бак), вона просто скидається і хід передається далі."
+
+msgid "During the game: F2 — the last move, F4 — your distance and whether you can move. Escape — end the game."
+msgstr "Під час гри: F2 — останній хід, F4 — ваша дистанція і чи можна їхати. Esc — закінчити гру."
+
+msgid "25 miles"
+msgstr "25 миль"
+
+msgid "50 miles"
+msgstr "50 миль"
+
+msgid "75 miles"
+msgstr "75 миль"
+
+msgid "100 miles"
+msgstr "100 миль"
+
+msgid "200 miles"
+msgstr "200 миль"
+
+msgid "Stall the engine"
+msgstr "Заглушити мотор"
+
+msgid "Empty the tank"
+msgstr "Злити бензин"
+
+msgid "Flat tire"
+msgstr "Проколоти шину"
+
+msgid "Accident"
+msgstr "Аварія"
+
+msgid "U-turn"
+msgstr "Розвернути назад"
+
+msgid "Speed limit"
+msgstr "Обмежити швидкість"
+
+msgid "Skip a turn"
+msgstr "Пропустити хід"
+
+msgid "Start the engine"
+msgstr "Завестися"
+
+msgid "Refuel"
+msgstr "Налити бензин"
+
+msgid "Fix the tire"
+msgstr "Накачати колесо"
+
+msgid "Repair after accident"
+msgstr "Полагодитися після аварії"
+
+msgid "End of U-turn"
+msgstr "Розвернутися вперед"
+
+msgid "End of speed limit"
+msgstr "Прибрати обмеження швидкості"
+
+msgid "Engine immunity"
+msgstr "Захист від глушіння мотора"
+
+msgid "Fuel immunity"
+msgstr "Захист від зливу бензину"
+
+msgid "Tire immunity"
+msgstr "Захист від проколу коліс"
+
+msgid "Accident immunity"
+msgstr "Захист від аварій"
+
+msgid "U-turn immunity"
+msgstr "Захист від розвороту"
+
+msgid "Speed limit immunity"
+msgstr "Захист від обмеження швидкості"
+
+msgid "Turn-skip immunity"
+msgstr "Захист від пропуску ходу"
+
+msgid "Strip all immunities"
+msgstr "Зняти всі захисти"
+
+msgid "Thrown from the saddle"
+msgstr "Скинути з сідла"
+
+msgid "Hunger"
+msgstr "Голод"
+
+msgid "Lost horseshoe"
+msgstr "Збити підкову"
+
+msgid "Exhaustion"
+msgstr "Виснаження"
+
+msgid "Saddle up"
+msgstr "Осідлати"
+
+msgid "Feed"
+msgstr "Нагодувати"
+
+msgid "Shoe the horse"
+msgstr "Підкувати"
+
+msgid "Rest"
+msgstr "Відпочинок"
+
+msgid "Saddle immunity"
+msgstr "Захист від падінь із сідла"
+
+msgid "Hunger immunity"
+msgstr "Захист від голоду"
+
+msgid "Horseshoe immunity"
+msgstr "Захист від втрати підкови"
+
+msgid "Exhaustion immunity"
+msgstr "Захист від виснаження"
+
+msgid "Multiplayer"
+msgstr "Мультиплеєр"
+
+msgid "Create a game"
+msgstr "Створити гру"
+
+msgid "Wait for an invitation"
+msgstr "Чекати на запрошення"
+
+msgid "Back"
+msgstr "Назад"
+
+msgid "Opponent nickname"
+msgstr "Нік суперника"
+
+msgid "Cannot verify the user. Check the connection."
+msgstr "Не вдалося перевірити користувача. Перевірте з’єднання."
+
+msgid "There is no user with this name."
+msgstr "Користувача з таким іменем немає."
+
+msgid "The user is offline. Send the invitation anyway?"
+msgstr "Користувач не в мережі. Усе одно надіслати запрошення?"
+
+msgid "No response from %{nick}."
+msgstr "Немає відповіді від %{nick}."
+
+msgid "%{nick} declined the invitation."
+msgstr "%{nick} відхилив запрошення."
+
+msgid "Cancel waiting?"
+msgstr "Перервати очікування?"
+
+msgid "Exit waiting for invitations?"
+msgstr "Вийти з очікування запрошень?"
+
+msgid "%{nick} invites you: %{settings}. Accept?"
+msgstr "%{nick} запрошує вас: %{settings}. Прийняти?"
+
+msgid "Cancel waiting for the start?"
+msgstr "Перервати очікування початку?"
+
+msgid "The game is out of sync. Return to the menu."
+msgstr "Гра розсинхронізувалася. Повернення в меню."
+
+msgid "By fate's will, %{nick} moves first."
+msgstr "Волею долі першим ходить %{nick}."
+
+msgid "The game is over."
+msgstr "Гру закінчено."
+
+msgid "%{nick} is at the finish line."
+msgstr "%{nick} на фініші."
+
+msgid "The bot"
+msgstr "Бот"
+
+msgid "Cannot connect to the multiplayer server."
+msgstr "Не вдалося підключитися до сервера мультиплеєра."
+
+msgid "Cannot invite %{nick}."
+msgstr "Не вдалося запросити %{nick}."
+
+msgid "Cannot accept the invitation."
+msgstr "Не вдалося прийняти запрошення."
