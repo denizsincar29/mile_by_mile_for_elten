@@ -23,6 +23,10 @@ module MileByMileElten
     # Индекс «3 общие колоды» в списке [своя у каждого, 1..5 общих].
     DEFAULT_DECK_INDEX = 3
 
+    # Последние выбранные настройки партии хранятся в data-json программы:
+    # при следующем запуске форма подставляется с ними.
+    SETTINGS_FILE = 'settings.json'.freeze
+
     # В Elten 3.0 функциональные клавиши распознаются только по VK-коду
     # (символы вида :key_f2 дают keycode 0 и никогда не срабатывают).
     # F3 не берём: он занят Элтеном (свернуть окно в трей).
@@ -154,18 +158,29 @@ module MileByMileElten
       @multiplayer = false
     end
 
+    # Плоское главное меню: без подменю, мультиплеер открыт со старта.
+    # Слушатель приглашений висит весь срок программы — входящее приглашение
+    # от друга показывается между выборами меню, отдельный «режим ожидания»
+    # не нужен.
     def main
+      register_invitation_listener
       loop do
+        if (invitation = take_pending_invitation)
+          play_invited_game(invitation)
+          next
+        end
         index = selector(
-          [_('Play against the bot'), _('Multiplayer'), _('Rules'), _('Exit')],
+          [_('Create a game'), _('Join a game'), _('Invite a friend'), _('Play against the bot'), _('Rules'), _('Exit')],
           header: _('Mile by Mile'),
           start_index: 0,
-          cancel_index: 3
+          cancel_index: 5
         )
         case index
-        when 0 then play_vs_bot
-        when 1 then multiplayer_menu
-        when 2 then show_help
+        when 0 then create_public_game
+        when 1 then join_public_game
+        when 2 then invite_friend
+        when 3 then play_vs_bot
+        when 4 then show_help
         else break
         end
       end
@@ -204,9 +219,11 @@ module MileByMileElten
     end
 
     # Настройки одной формой: три переключателя (набор карт, дистанция,
-    # количество колод) и кнопки ОК/Отмена. По умолчанию — 3 общие колоды.
-    # Возвращает [variant, distance, deck_mode, deck_copies] или nil.
+    # количество колод) и кнопки ОК/Отмена. Позиции подставляются из
+    # сохранённых последних настроек (data-json программы). Возвращает
+    # [variant, distance, deck_mode, deck_copies] или nil.
     def choose_settings
+      last = load_last_settings
       variant_labels = VARIANTS.map { |_id, label| _(label) }
       distance_labels = DISTANCE_OPTIONS.map { |d| _('%{d} miles') % { d: d } }
       deck_labels = [_('Each player has their own deck')]
@@ -217,9 +234,9 @@ module MileByMileElten
       # дистанция, 1000 миль». С пустой меткой при фокусе слышно «Дистанция:
       # 1000 миль», а при смене значения — только само значение.
       fields = [
-        ChoiceListBox.new([['', variant_labels, 0]], header: _('Card set')),
-        ChoiceListBox.new([['', distance_labels, 0]], header: _('Distance')),
-        ChoiceListBox.new([['', deck_labels, DEFAULT_DECK_INDEX]], header: _('Number of decks'))
+        ChoiceListBox.new([['', variant_labels, last[:variant_index]]], header: _('Card set')),
+        ChoiceListBox.new([['', distance_labels, last[:distance_index]]], header: _('Distance')),
+        ChoiceListBox.new([['', deck_labels, last[:deck_index]]], header: _('Number of decks'))
       ]
       accept = Button.new(_('OK'))
       cancel = Button.new(_('Cancel'))
@@ -238,7 +255,46 @@ module MileByMileElten
       deck_idx = fields[2].value(0)
       deck_mode = deck_idx.zero? ? :separate : :shared
       deck_copies = [deck_idx, 1].max
-      [variant, distance, deck_mode, deck_copies]
+      settings = [variant, distance, deck_mode, deck_copies]
+      save_last_settings(settings)
+      settings
+    end
+
+    # Чтение последних настроек из data-json. Индексы вычисляются так, чтобы
+    # форма открылась с прошлыми значениями; на битые данные — дефолты.
+    def load_last_settings
+      saved = @program.read_json(SETTINGS_FILE, default: {})
+      saved = {} unless saved.is_a?(Hash)
+      last = saved['last'].is_a?(Hash) ? saved['last'] : {}
+      variant = (last['variant'] || 'cars').to_sym
+      distance = (last['distance'] || 1000).to_i
+      deck_mode = (last['deck_mode'] || 'shared').to_sym
+      deck_copies = (last['deck_copies'] || DECK_COPY_COUNTS[DEFAULT_DECK_INDEX - 1]).to_i
+
+      variant_index = VARIANTS.index { |id, _label| id == variant } || 0
+      distance_index = DISTANCE_OPTIONS.index(distance) || 0
+      deck_index =
+        if deck_mode == :separate
+          0
+        else
+          i = DECK_COPY_COUNTS.index(deck_copies)
+          i ? i + 1 : DEFAULT_DECK_INDEX
+        end
+      { variant_index: variant_index, distance_index: distance_index, deck_index: deck_index }
+    end
+
+    # Последние настройки — в data-json программы. Ошибка записи не роняет
+    # запуск партии: молча пропускаем (нет диска — играем всё равно).
+    def save_last_settings(settings)
+      variant, distance, deck_mode, deck_copies = settings
+      @program.write_json(SETTINGS_FILE, 'last' => {
+                            'variant' => variant.to_s,
+                            'distance' => distance,
+                            'deck_mode' => deck_mode.to_s,
+                            'deck_copies' => deck_copies
+                          })
+    rescue StandardError
+      nil
     end
 
     # Стартовый анонс: «Поехали! По воле судьбы первым ходите вы / ходит бот.»,
@@ -273,26 +329,37 @@ module MileByMileElten
     # Лениво создаём endpoint Communication (app_id из манифеста). Колбэки
     # Communication диспатчатся на главном потоке из главного цикла Elten
     # (Communication.tick в loop.rb), поэтому @inbox трогается только из
-    # основного потока и мьютекс не нужен.
+    # основного потока и мьютекс не нужен. Без сети endpoint не строится —
+    # nil; все вызовы поверх него обёрнуты и падают в «Cannot connect».
     def communication_endpoint
       @communication ||= @program.communication
+    rescue StandardError
+      nil
     end
 
-    # Регистрируем приём приглашений один раз: колбэк кладёт Invitation в
-    # @inbox, а «Ждать приглашение» забирает его оттуда в своём цикле.
+    # Глобальный приём приглашений: колбэк кладёт Invitation в @inbox, а
+    # главный цикл main предлагает его принять между показами меню. Флаг
+    # ставится только при успехе, так что при временной потере сети
+    # следующий вход в main попробует поднять endpoint снова.
     def register_invitation_listener
       return if @invitation_listener
 
-      @invitation_listener = true
-      communication_endpoint.on_invitation do |invitation|
+      endpoint = communication_endpoint
+      return unless endpoint
+
+      endpoint.on_invitation do |invitation|
         @inbox << [:invitation, invitation]
       end
+      @invitation_listener = true
+    rescue StandardError
+      nil
     end
 
-    # Подписка сессии на события партии: входящие сообщения, уход участника
-    # и закрытие сессии — всё в @inbox для Runner-циклов.
+    # Подписка сессии на события партии: входящие сообщения, приход и уход
+    # участника, закрытие сессии — всё в @inbox для Runner-циклов.
     def register_session_listeners(session)
       session.on_reliable { |msg| @inbox << [:reliable, msg] }
+      session.on_participant_joined { |participant| @inbox << [:participant_joined, participant] }
       session.on_participant_left { |participant, _reason| @inbox << [:participant_left, participant] }
       session.on_closed { |reason| @inbox << [:session_closed, reason] }
     end
@@ -362,114 +429,131 @@ module MileByMileElten
       nil
     end
 
-    def multiplayer_menu
-      loop do
-        index = selector(
-          [_('Create a game'), _('Wait for an invitation'), _('Back')],
-          header: _('Multiplayer'),
-          start_index: 0,
-          cancel_index: 2
-        )
-        case index
-        when 0
-          return if host_game == :played
-        when 1
-          return if wait_for_invite == :played
-        else
-          return
-        end
-      end
+    # Вынуть из @inbox первое входящее приглашение, если оно там есть. Зовётся
+    # из главного цикла между показами меню — приглашение от друга
+    # всплывает, даже когда игрок не сидит в «режиме ожидания».
+    def take_pending_invitation
+      i = @inbox.index { |kind, _| kind == :invitation }
+      i && @inbox.delete_at(i)[1]
     end
 
-    # Хост: ввести ник соперника → проверить карточку → создать сессию и
-    # пригласить → дождаться accept → собрать игру → старт. Настройки уходят
-    # гостю через session_metadata. Возвращает :played или :cancelled.
-    def host_game
-      nick = input_text(_('Opponent nickname'), escapable: true, text: '')
-      return :cancelled if nick.nil? || nick.strip.empty?
+    # Ник владельца (хоста) публичной сессии — создатель помечен owner?.
+    def public_session_host(public_session)
+      host = public_session.participants.find(&:owner?)
+      host = public_session.participants.first if host.nil?
+      host&.user.to_s
+    end
 
-      nick = nick.strip
-      card = user_card(nick)
-      if card.nil?
-        alert(_('Cannot verify the user. Check the connection.'), false)
-        return :cancelled
-      end
-      if card.name.to_s.empty?
-        alert(_('There is no user with this name.'), false)
-        return :cancelled
-      end
-      unless card.status.online
-        return :cancelled unless confirm(_('The user is offline. Send the invitation anyway?'))
-      end
+    # Описание публичной сессии для списка «Join a game»: хост + настройки.
+    def public_session_label(public_session)
+      host = public_session_host(public_session)
+      host = _('Unknown player') if host.to_s.empty?
+      variant, distance, deck_mode, deck_copies = parse_settings(public_session.metadata)
+      "#{host} — #{describe_settings(variant, distance, deck_mode, deck_copies)}"
+    end
 
+    # Хост лобби: выбрать настройки → открыть публичную игру → ждать, пока
+    # кто-то присоединится из «Join a game» → собрать партию и стартовать.
+    def create_public_game
       settings = choose_settings
-      return :cancelled if settings.nil?
+      return if settings.nil?
 
       variant, distance, deck_mode, deck_copies = settings
       session =
         begin
           communication_endpoint.create_session(
             metadata: settings_payload(variant, distance, deck_mode, deck_copies),
-            capacity: 2
+            capacity: 2,
+            public: true
           )
         rescue StandardError
           alert(_('Cannot connect to the multiplayer server.'), false)
-          return :cancelled
+          return
         end
       @session = session
       @mp_host = true
       register_session_listeners(session)
 
-      invitation =
-        begin
-          session.invite(nick)
-        rescue StandardError
-          alert(_('Cannot invite %{nick}.') % { nick: nick }, false)
-          teardown_session
-          return :cancelled
-        end
-
-      # Ждём, пока гость примет приглашение: статус инвайта меняется на
-      # :accepted, а в сессии появляется второй участник.
+      alert(_('The game is open in the lobby. Waiting for an opponent. Escape — cancel.'), false)
       status = nil
       runner = Runner.new
       runner.on_key(KEY_F2) { safely { say_last_move } }
       runner.on_key(KEY_F4) { safely { say_status } }
-      runner.on_key(:key_escape) { |current| current.stop(:cancelled) if confirm(_('Cancel waiting?')) }
-      runner.after(60) { |current| current.stop(:timeout) }
+      runner.on_key(:key_escape) { |current| current.stop(:cancelled) if confirm(_('Cancel waiting for an opponent?')) }
+      runner.after(120) { |current| current.stop(:timeout) }
       runner.on_tick do |current|
-        case invitation.status
-        when :accepted
-          status = :accepted if session.participants.size >= 2
-          current.stop if status
-        when :rejected, :cancelled
-          status = :rejected
+        if session.participants.size >= 2
+          status = :ready
           current.stop
-        end
-        if @inbox.any? { |kind, _| kind == :session_closed || kind == :participant_left }
-          status = :cancelled
+        elsif @inbox.any? { |kind, _| kind == :session_closed }
+          status = :closed
           current.stop
         end
       end
       status = runner.run || status
-      case status
-      when :accepted
-      when :timeout, :cancelled, nil
-        alert(_('No response from %{nick}.') % { nick: nick }, false)
+
+      if status == :ready
+        guest = session.participants.find { |p| !p.owner? }
+        guest_nick = guest&.user.to_s
+        guest_nick = _('Opponent') if guest_nick.empty?
+        start_hosted_game(variant, distance, deck_mode, deck_copies, guest_nick)
+      else
+        alert(_('No one joined the game.'), false)
         teardown_session
-        return :cancelled
-      when :rejected
-        alert(_('%{nick} declined the invitation.') % { nick: nick }, false)
-        teardown_session
-        return :cancelled
+      end
+    end
+
+    # Гость лобби: свежий список публичных игр → выбрать → войти → дождаться
+    # start от хоста → собрать партию.
+    def join_public_game
+      sessions =
+        begin
+          communication_endpoint.public_sessions
+        rescue StandardError
+          alert(_('Cannot connect to the multiplayer server.'), false)
+          return
+        end
+      sessions = sessions.reject(&:full?)
+      if sessions.empty?
+        alert(_('No games in the lobby yet.'), false)
+        return
       end
 
+      index = selector(
+        sessions.map { |ps| public_session_label(ps) },
+        header: _('Join a game'),
+        start_index: 0,
+        cancel_index: -1
+      )
+      return if index.nil? || index.negative?
+
+      ps = sessions[index]
+      host_nick = public_session_host(ps)
+      host_nick = _('Unknown player') if host_nick.empty?
+      variant, distance, deck_mode, deck_copies = parse_settings(ps.metadata)
+      session =
+        begin
+          communication_endpoint.join(ps)
+        rescue StandardError
+          alert(_('Cannot join the game.'), false)
+          return
+        end
+      @session = session
+      @mp_host = false
+      register_session_listeners(session)
+
+      join_and_wait_start(host_nick, variant, distance, deck_mode, deck_copies)
+    end
+
+    # Хост собрал соперника (из лобби или принявшего инвайт друга): построить
+    # движок, послать start с сидом и порядком и прогнать партию.
+    def start_hosted_game(variant, distance, deck_mode, deck_copies, opponent_nick)
       seed = rand(2**31)
       @variant = variant
       @audio.variant = variant
       @multiplayer = true
       @human = Player.new(_('You'))
-      @opponent = Player.new(nick)
+      @opponent = Player.new(opponent_nick)
       @game = build_mp_game([@human, @opponent], variant, distance, deck_mode, deck_copies, seed)
       @move_history = []
 
@@ -482,17 +566,93 @@ module MileByMileElten
       :played
     end
 
-    # Гость: ждать invite → принять/отклонить → ждать start → собрать игру.
-    # Настройки хоста читаем из session_metadata приглашения, ник хоста — из
-    # sender (не из введённого текста).
-    def wait_for_invite
-      register_invitation_listener
-      result = wait_for_events(cancel_text: _('Exit waiting for invitations?')) do |kind, _payload|
-        kind == :invitation
-      end
-      return :cancelled if result.nil? || result == :timeout || result == :cancelled
+    # Пригласить конкретного друга по нику: приватная сессия и инвайт; если
+    # программа объявила серверное приложение — друг ещё и получает
+    # уведомление в Элтен. Пока друг не принял, инвайт повторяется: он мог
+    # открыть Mile только после уведомления, а инвайт доходит лишь когда его
+    # endpoint активен.
+    def invite_friend
+      nick = input_text(_('Friend nickname'), escapable: true, text: '')
+      return if nick.nil? || nick.strip.empty?
 
-      _kind, invitation = result
+      nick = nick.strip
+      card = user_card(nick)
+      if card.nil?
+        alert(_('Cannot verify the user. Check the connection.'), false)
+        return
+      end
+      if card.name.to_s.empty?
+        alert(_('There is no user with this name.'), false)
+        return
+      end
+      unless card.status.online
+        return unless confirm(_('The user is offline. Send the invitation anyway?'))
+      end
+
+      settings = choose_settings
+      return if settings.nil?
+
+      variant, distance, deck_mode, deck_copies = settings
+      session =
+        begin
+          communication_endpoint.create_session(
+            metadata: settings_payload(variant, distance, deck_mode, deck_copies),
+            capacity: 2
+          )
+        rescue StandardError
+          alert(_('Cannot connect to the multiplayer server.'), false)
+          return
+        end
+      @session = session
+      @mp_host = true
+      register_session_listeners(session)
+
+      begin
+        session.invite(nick)
+      rescue StandardError
+        alert(_('Cannot invite %{nick}.') % { nick: nick }, false)
+        teardown_session
+        return
+      end
+      send_invite_notification(nick, variant, distance, deck_mode, deck_copies)
+
+      status = nil
+      last_retry = Time.now.to_f
+      runner = Runner.new
+      runner.on_key(KEY_F2) { safely { say_last_move } }
+      runner.on_key(KEY_F4) { safely { say_status } }
+      runner.on_key(:key_escape) { |current| current.stop(:cancelled) if confirm(_('Cancel waiting?')) }
+      runner.after(180) { |current| current.stop(:timeout) }
+      runner.on_tick do |current|
+        if session.participants.size >= 2
+          status = :accepted
+          current.stop
+        elsif @inbox.any? { |kind, _| kind == :session_closed }
+          status = :cancelled
+          current.stop
+        elsif Time.now.to_f - last_retry >= 8
+          last_retry = Time.now.to_f
+          begin
+            session.invite(nick)
+          rescue StandardError
+            nil
+          end
+        end
+      end
+      status = runner.run || status
+      case status
+      when :accepted
+        start_hosted_game(variant, distance, deck_mode, deck_copies, nick)
+      else
+        alert(_('No response from %{nick}.') % { nick: nick }, false)
+        teardown_session
+      end
+    end
+
+    # Входящее приглашение от друга, пойманное в главном меню: принять или
+    # отклонить, войти в сессию хоста и сыграть. Отдельного «режима ожидания»
+    # больше нет — меню приём приглашений держит само.
+    def play_invited_game(invitation)
       host_nick = invitation.sender.user
       variant, distance, deck_mode, deck_copies = parse_settings(invitation.session_metadata)
 
@@ -500,7 +660,7 @@ module MileByMileElten
                      { nick: host_nick, settings: describe_settings(variant, distance, deck_mode, deck_copies) })
       unless confirm(invite_text)
         invitation.reject
-        return :cancelled
+        return
       end
 
       session =
@@ -508,13 +668,20 @@ module MileByMileElten
           invitation.accept
         rescue StandardError
           alert(_('Cannot accept the invitation.'), false)
-          return :cancelled
+          return
         end
       @session = session
       @mp_host = false
       register_session_listeners(session)
 
-      start_res = wait_for_events(timeout: 120, cancel_text: _('Cancel waiting for the start?')) do |kind, payload|
+      join_and_wait_start(host_nick, variant, distance, deck_mode, deck_copies)
+    end
+
+    # Гость уже в сессии (принял инвайт или влился в лобби): дождаться start
+    # от хоста, собрать движок в том же порядке (хост, гость), сверить
+    # синхронизацию и прогнать партию.
+    def join_and_wait_start(host_nick, variant, distance, deck_mode, deck_copies)
+      start_res = wait_for_events(timeout: 60, cancel_text: _('Cancel waiting for the start?')) do |kind, payload|
         kind == :reliable && packet_type(payload.data) == 'start'
       end
       if start_res.nil? || start_res == :timeout || start_res == :cancelled
@@ -523,7 +690,10 @@ module MileByMileElten
       end
 
       start = parse_packet(start_res[1].data)
-      return :cancelled if start.nil?
+      if start.nil?
+        teardown_session
+        return :cancelled
+      end
 
       seed = start['seed'] || rand(2**31)
       @variant = variant
@@ -546,6 +716,28 @@ module MileByMileElten
       finish_mp_rounds
       @multiplayer = false
       :played
+    end
+
+    # Уведомление другу в Элтен через серверное приложение программы.
+    # Работает только когда server_app объявлен, зарегистрирован и включает
+    # notifications — иначе базовый канал (Communication-инвайт) остаётся.
+    def send_invite_notification(nick, variant, distance, deck_mode, deck_copies)
+      definition = @program.respond_to?(:server_app_definition) ? @program.server_app_definition : nil
+      return unless definition && definition.uuid && definition.notifications?
+
+      @program.send_notification(
+        nick,
+        type: 'game.invite',
+        metadata: {
+          'variant' => variant.to_s,
+          'distance' => distance,
+          'deck_mode' => deck_mode.to_s,
+          'deck_copies' => deck_copies
+        },
+        expires_in: 600
+      )
+    rescue StandardError
+      nil
     end
 
     def build_mp_game(players, variant, distance, deck_mode, deck_copies, seed)
