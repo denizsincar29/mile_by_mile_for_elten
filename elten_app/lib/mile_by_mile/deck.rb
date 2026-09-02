@@ -19,9 +19,17 @@ module MileByMile
     # seed делает тасовку детерминированной — оба игрока в мультиплеере
     # получают одинаковую колоду, передав один и тот же сид. Без сида (или
     # когда колода создана без сида) — случайно, как раньше.
+    #
+    # Тасование — собственный Fisher–Yates через rng, а не Array#shuffle!:
+    # встроенный shuffle!(random:) не принимает аргумент в новом рантайме
+    # Elten (src/ri), а свой алгоритм детерминирован на любом Ruby.
     def shuffle!(seed: nil)
       rng = seed.nil? ? (@rng || Random.new) : Random.new(seed)
-      @cards.shuffle!(random: rng)
+      cards = @cards
+      (cards.length - 1).downto(1) do |i|
+        j = rng.rand(i + 1)
+        cards[i], cards[j] = cards[j], cards[i]
+      end
       self
     end
 
