@@ -66,7 +66,7 @@ jobs:
 
       - name: Build signed package
         run: |
-          VERSION="$(ruby -rjson -e 'd=File.read(%(src/__app.rb)); m=d[/\A=begin Elten3AppInfo(.*?)=end Elten3AppInfo/m,1]; puts JSON.parse(m)[%q(version)]')"
+          VERSION="$(ruby -rjson -e 'd=File.read(%(src/__app.rb)); m=d[/^=begin[ \t]+Elten3AppInfo(.*?)^=end[ \t]+Elten3AppInfo/m,1]; puts JSON.parse(m)[%q(version)]')"
           echo "version=$VERSION"
           ruby elten3/tools/build-eltsetup.rb \
             --cert /tmp/mile.crt.pem \
