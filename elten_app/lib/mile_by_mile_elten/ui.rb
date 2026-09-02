@@ -27,11 +27,13 @@ module MileByMileElten
     # при следующем запуске форма подставляется с ними.
     SETTINGS_FILE = 'settings.json'.freeze
 
-    # В Elten 3.0 функциональные клавиши распознаются только по VK-коду
-    # (символы вида :key_f2 дают keycode 0 и никогда не срабатывают).
-    # F3 не берём: он занят Элтеном (свернуть окно в трей).
-    KEY_F2 = 0x71
-    KEY_F4 = 0x73
+    # Хоткеи игры — Ctrl+M (последний ход) и Ctrl+S (статус). Функциональные
+    # клавиши в Элтене заняты: F1-F11/F13-F23 — Quick Actions, F12 —
+    # перезапуск клиента. Цифры не берём: в списке карт они работают как
+    # быстрый поиск по первой букве («50 миль» на '5'). VK-код распознаётся
+    # независимо от раскладки; без Ctrl буквы ничего не делают.
+    KEY_LAST_MOVE = 0x4D # M
+    KEY_STATUS = 0x53    # S
 
     IMMOBILIZING = %i[stall empty_tank flat_tire accident].freeze
 
@@ -390,15 +392,14 @@ module MileByMileElten
       pkt && pkt['type']
     end
 
-    # Ожидание нужного события в Runner: F2/F4 активны, Escape — отмена,
+    # Ожидание нужного события в Runner: Ctrl+M/Ctrl+S активны, Escape — отмена,
     # timeout секунд — выход по таймауту. Блок получает событие [kind,
     # payload] и возвращает true, когда событие «наше». Найденное событие
     # удаляется из очереди, чтобы не перехватывалось повторно. Возвращает
     # [kind, payload], :timeout или :cancelled.
     def wait_for_events(timeout: 60, cancel_text: _('Cancel waiting?'))
       runner = Runner.new
-      runner.on_key(KEY_F2) { safely { say_last_move } }
-      runner.on_key(KEY_F4) { safely { say_status } }
+      bind_game_hotkeys(runner)
       runner.on_key(:key_escape) { |current| current.stop(:cancelled) if confirm(cancel_text) }
       runner.after(timeout) { |current| current.stop(:timeout) }
       found = nil
@@ -477,8 +478,7 @@ module MileByMileElten
       alert(_('The game is open in the lobby. Waiting for an opponent. Escape — cancel.'), false)
       status = nil
       runner = Runner.new
-      runner.on_key(KEY_F2) { safely { say_last_move } }
-      runner.on_key(KEY_F4) { safely { say_status } }
+      bind_game_hotkeys(runner)
       runner.on_key(:key_escape) { |current| current.stop(:cancelled) if confirm(_('Cancel waiting for an opponent?')) }
       runner.after(120) { |current| current.stop(:timeout) }
       runner.on_tick do |current|
@@ -619,8 +619,7 @@ module MileByMileElten
       status = nil
       last_retry = Time.now.to_f
       runner = Runner.new
-      runner.on_key(KEY_F2) { safely { say_last_move } }
-      runner.on_key(KEY_F4) { safely { say_status } }
+      bind_game_hotkeys(runner)
       runner.on_key(:key_escape) { |current| current.stop(:cancelled) if confirm(_('Cancel waiting?')) }
       runner.after(180) { |current| current.stop(:timeout) }
       runner.on_tick do |current|
@@ -814,7 +813,8 @@ module MileByMileElten
           alert(action, false)
           return nil
         else
-          alert(line, true)
+          tail = turn_tail(human_moved: true)
+          alert(tail.empty? ? line : "#{line} #{tail}", true)
           return nil unless @game.current_player.equal?(@human)
         end
       end
@@ -865,7 +865,8 @@ module MileByMileElten
       action = record_move(@opponent, card, target: target, result: result)
       drawn = (@human.hand - human_before).first
       line = drawn ? "#{action} #{draw_phrase(@human, drawn)}" : action
-      alert(line, true)
+      tail = turn_tail(human_moved: false)
+      alert(tail.empty? ? line : "#{line} #{tail}", true)
     end
 
     def send_mp_move(card_index, card)
@@ -943,26 +944,29 @@ module MileByMileElten
           alert(action, false)
           return nil
         else
-          alert(line, true)
+          tail = turn_tail(human_moved: true)
+          alert(tail.empty? ? line : "#{line} #{tail}", true)
           return nil unless @game.current_player.equal?(@human)
         end
       end
     end
 
     # Список карт руки на ListBox внутри Runner: Enter выбирает карту,
-    # F2/F4/Escape активны всё время хода. Возвращает карту или :aborted.
+    # Ctrl+M/Ctrl+S/Escape активны всё время хода. Возвращает карту или :aborted.
+    # Заголовок списка пустой: «Ваш ход» уже сказан хвостом предыдущего анонса
+    # (turn_tail) — заголовок дублировал бы его отдельной репликой.
     def pick_card
       loop do
         options = @human.hand.map { |c| _(c.name) }
-        header = _('Your turn')
+        header = ''
         picked = nil
         runner = Runner.new
-        runner.on_key(KEY_F2) { safely { say_last_move } }
-        runner.on_key(KEY_F4) { safely { say_status } }
+        bind_game_hotkeys(runner)
         runner.on_key(:key_escape) do |current|
           current.stop(:aborted) if confirm(_('End the game?'))
         end
         list = ListBox.new(options, header: header, index: 0, flags: ListBox::Flags::AnyDir, quiet: false)
+        mark_playable_cards(list)
         list.on(:select) { |selection| picked = selection[0] }
         runner.on_tick do
           list.update
@@ -971,6 +975,23 @@ module MileByMileElten
         list.focus
         return :aborted if runner.run == :aborted
         return @human.hand[picked] if picked
+      end
+    end
+
+    # Карты, которые сыграются с эффектом, помечаем статусом строки со звуком
+    # «закреплённый элемент списка»: при фокусе на такой карте Elten играет
+    # чпуньк (как форумы «пинят» закреплённые темы). Карты-пустышки, которые
+    # уйдут в отбой, звука не дают — чтобы не выбросить карту, думая, что она
+    # сыграется. Наличие эффекта считает движок (Game#effective?), без мутаций.
+    def mark_playable_cards(list)
+      return if @game.nil?
+
+      opponent = @multiplayer ? @opponent : @bot_player
+      @human.hand.each_with_index do |card, index|
+        target = card.opponent_only? ? opponent : nil
+        next unless @game.effective?(card, target: target)
+
+        list.set_item_status(index, 'listbox_itempinned', '', '')
       end
     end
 
@@ -1004,17 +1025,17 @@ module MileByMileElten
       if drawn && !@game.finished? && @game.current_player.equal?(@human)
         text += " #{draw_phrase(@human, drawn)}"
       end
-      alert(text, true)
+      tail = turn_tail(human_moved: false)
+      alert(tail.empty? ? text : "#{text} #{tail}", true)
       nil
     end
 
     # Пауза перед ходом бота: рандом 2-4 секунды (сложный выбор — до ~5.5).
-    # В это время F2/F4/Escape активны. Ничего не озвучиваем — сам ход бота
+    # В это время Ctrl+M/Ctrl+S/Escape активны. Ничего не озвучиваем — сам ход бота
     # проговорится сразу после паузы (как в ухе).
     def bot_think
       runner = Runner.new
-      runner.on_key(KEY_F2) { safely { say_last_move } }
-      runner.on_key(KEY_F4) { safely { say_status } }
+      bind_game_hotkeys(runner)
       runner.on_key(:key_escape) do |current|
         current.stop(:aborted) if confirm(_('End the game?'))
       end
@@ -1030,6 +1051,26 @@ module MileByMileElten
       @move_history << text
       @move_history.shift if @move_history.size > 100
       text
+    end
+
+    # Хвост к сообщению о ходе — чей следующий ход. Озвучка одним сообщением:
+    # «Вы проехали 200 миль. Ходит бот.» / «Бот защитился. Ходит бот.» /
+    # «Бот проехал 50 миль. Ваш ход.» — чтобы «Ваш ход» не звучал отдельной
+    # репликой списка сверху. human_moved: только что ходил человек; если он
+    # сохранил ход (первая защита), хвост пуст — человек уже смотрит в список
+    # карт и повторное «Ваш ход» было бы шумом. А вот повторный ход бота или
+    # соперника после защиты озвучивается («Ходит бот» / «Ходит xuser»), как в
+    # живом разговоре.
+    def turn_tail(human_moved:)
+      return '' if @game.nil? || @game.finished?
+
+      if @game.current_player.equal?(@human)
+        human_moved ? '' : _('Your turn.')
+      elsif @multiplayer
+        _('%{nick} moves next.') % { nick: @opponent.name }
+      else
+        _('The bot moves.')
+      end
     end
 
     # Контекст розыгрыша ДО применения карты — для звука «как в ухе»: звучат
@@ -1080,7 +1121,7 @@ module MileByMileElten
     end
 
     # Фраза действия: что сыграл (или сбросил) игрок. Именно её NVDA читает
-    # после хода, поэтому она же попадает в историю для F2.
+    # после хода, поэтому она же попадает в историю для Ctrl+M.
     def action_phrase(player, card, target: nil, result:)
       me = player.equal?(@human)
       return discard_phrase(player, card) if result == :wasted
@@ -1168,7 +1209,20 @@ module MileByMileElten
       localize_subject(text, player)
     end
 
-    # F2: последний ход
+    # Хоткеи, активные во всех Runner-циклах игры: Ctrl+M — последний ход,
+    # Ctrl+S — дистанция/статус. Модификатор обязателен — голые M/S не
+    # должны ничего делать (в списке карт они бы ушли в быстрый поиск).
+    def bind_game_hotkeys(runner)
+      runner.on_key(KEY_LAST_MOVE) { say_last_move if main_modifier? }
+      runner.on_key(KEY_STATUS) { say_status if main_modifier? }
+    end
+
+    # Главный модификатор Элтена (на Windows — Control) зажат.
+    def main_modifier?
+      modifier_held?(:main_modifier)
+    end
+
+    # Ctrl+M: последний ход
     def say_last_move
       if @move_history && @move_history.any?
         speak(@move_history.last)
@@ -1177,7 +1231,7 @@ module MileByMileElten
       end
     end
 
-    # F4: дистанция и можно ли ехать (что мешает — если мешает)
+    # Ctrl+S: дистанция и можно ли ехать (что мешает — если мешает)
     def say_status
       return speak(_('No game in progress.')) unless @human && @game
 
@@ -1205,8 +1259,8 @@ module MileByMileElten
       blockers
     end
 
-    # Обёртка для обработчиков F2/F4: ни одно исключение не должно вылететь
-    # из обработчика клавиш внутрь Runner (защита от вылета Elten).
+    # Обёртка для обработчиков Ctrl+M/Ctrl+S: ни одно исключение не должно
+    # вылететь из обработчика клавиш внутрь Runner (защита от вылета Elten).
     def safely
       yield
     rescue StandardError
@@ -1238,7 +1292,7 @@ module MileByMileElten
         _('Remedy cards fix your own car: start the engine, refuel, fix the tire, repair after accident, end of U-turn, end of speed limit.'),
         _('Safety cards are played on yourself once and permanently block one kind of hazard. Playing one for the first time keeps your turn.'),
         _("If a card can't take effect (for example, refueling a full tank), it is simply discarded and the turn passes on."),
-        _('During the game: F2 — the last move, F4 — your distance and whether you can move. Escape — end the game.')
+        _('During the game: Ctrl+M — the last move, Ctrl+S — your distance and whether you can move. Escape — end the game.')
       ].join("\n\n"), header: _('Rules'))
     end
   end
