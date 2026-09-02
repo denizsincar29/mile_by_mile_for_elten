@@ -13,6 +13,7 @@ module MileByMileElten
   #   <variant>_success_<key>        — противодействие сработало
   #   prot_<key>                     — защита выставлена (тихо, общая)
   #   wow                            — обгон соперника по дистанции
+  #   victory / defeat               — финиш первым / проигрыш (общие)
   # variant: cars | horses
   # key:     ready(stall) tank(empty_tank) tire(flat_tire) wheel(turned_back)
   #          seat(accident) speed(speed_limit) pass(skip_turn)
@@ -102,6 +103,17 @@ module MileByMileElten
 
     def removed_all_safeties
       play("#{@variant}_fail_pass")
+    end
+
+    # Финиш первым (победа) и финиш соперника (поражение) — общие для обоих
+    # вариантов звуки victory/defeat (выбор Дениза: 8-bit фанфара и sad
+    # trombone; CC BY — атрибуция в AUDIO_ATTRIBUTION.md у корня игры).
+    def win
+      play('victory')
+    end
+
+    def lose
+      play('defeat')
     end
   end
 end

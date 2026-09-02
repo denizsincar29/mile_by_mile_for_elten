@@ -696,8 +696,10 @@ module MileByMileElten
     def announce_mp_result
       winner = @game.winner
       if winner.equal?(@human)
+        @audio.win
         alert(_('You are at the finish line. Congratulations!'), true)
       elsif winner
+        @audio.lose
         alert((_('%{nick} is at the finish line.') % { nick: @opponent.name }), true)
       else
         alert(_('The deck ran out. Draw.'), true)
@@ -1026,9 +1028,10 @@ module MileByMileElten
     def announce_result
       winner = @game.winner
       if winner.equal?(@human)
-        # в ухе у победы нет спецзвука — wow играет при обгоне соперника
+        @audio.win
         alert(_('You are at the finish line. Congratulations!'), true)
       elsif winner != nil
+        @audio.lose
         alert(_('The bot is at the finish line.'), true)
       else
         alert(_('The deck ran out. Draw.'), true)
