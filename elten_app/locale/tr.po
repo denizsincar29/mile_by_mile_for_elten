@@ -81,6 +81,9 @@ msgstr "Sıra sende."
 msgid "The bot moves."
 msgstr "Sıra botta."
 
+msgid "%{nick} moves next."
+msgstr "%{nick} oynayacak."
+
 msgid "You"
 msgstr "Sen"
 
@@ -393,8 +396,8 @@ msgstr "Koruma kartları kendine bir kez oynanır ve bir tür engeli kalıcı ol
 msgid "If a card can't take effect (for example, refueling a full tank), it is simply discarded and the turn passes on."
 msgstr "Bir kart etki edemiyorsa (örneğin dolu depoya yakıt almak), sadece atılır ve sıra diğerine geçer."
 
-msgid "During the game: F2 — the last move, F4 — your distance and whether you can move. Escape — end the game."
-msgstr "Oyun sırasında: F2 — son hamle, F4 — mesafen ve ilerleyip ilerleyemediğin. Esc — oyunu bitir."
+msgid "During the game: Ctrl+M — the last move, Ctrl+S — your distance and whether you can move. Escape — end the game."
+msgstr "Oyun sırasında: Ctrl+M — son hamle, Ctrl+S — mesafen ve ilerleyip ilerleyemediğin. Esc — oyunu bitir."
 
 msgid "25 miles"
 msgstr "25 mil"

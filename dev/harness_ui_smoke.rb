@@ -120,6 +120,8 @@ class ListBox
 
   def focus(*_args); end
 
+  def set_item_status(*_args); end
+
   def update
     return if @updated || @options.empty?
 
@@ -204,6 +206,14 @@ class FakeProgram
   def play_app_sound(name, **_kw)
     true
   end
+
+  def read_json(_path, default: nil, **_kw)
+    default
+  end
+
+  def write_json(_path, *_args, **_kw)
+    true
+  end
 end
 
 # --- run N full games through MileByMileElten::UI ---
@@ -257,6 +267,6 @@ rescue StandardError => e
 end
 
 puts "Done: #{GAMES} games via the UI (human always plays the first card in hand), crashes: #{crashes}"
-puts "F2/F4 status speech: #{status_crashes.zero? ? 'yes' : 'NO'}"
+puts "Ctrl+M/S status speech: #{status_crashes.zero? ? 'yes' : 'NO'}"
 puts "Rules screen rendered via display_text: #{help_crashes.zero? ? 'yes' : 'NO'}"
 exit(crashes.zero? && status_crashes.zero? && help_crashes.zero? ? 0 : 1)

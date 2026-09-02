@@ -81,6 +81,9 @@ msgstr "Tu turno."
 msgid "The bot moves."
 msgstr "Le toca al bot."
 
+msgid "%{nick} moves next."
+msgstr "Le toca a %{nick}."
+
 msgid "You"
 msgstr "Tú"
 
@@ -393,8 +396,8 @@ msgstr "Las cartas de protección se juegan sobre ti una sola vez y bloquean par
 msgid "If a card can't take effect (for example, refueling a full tank), it is simply discarded and the turn passes on."
 msgstr "Si una carta no puede surtir efecto (por ejemplo, repostar con el depósito lleno), se descarta y el turno pasa al siguiente."
 
-msgid "During the game: F2 — the last move, F4 — your distance and whether you can move. Escape — end the game."
-msgstr "Durante la partida: F2 — la última jugada, F4 — tu distancia y si puedes moverte. Escape — terminar la partida."
+msgid "During the game: Ctrl+M — the last move, Ctrl+S — your distance and whether you can move. Escape — end the game."
+msgstr "Durante la partida: Ctrl+M — la última jugada, Ctrl+S — tu distancia y si puedes moverte. Escape — terminar la partida."
 
 msgid "25 miles"
 msgstr "25 millas"

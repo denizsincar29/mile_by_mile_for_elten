@@ -1,4 +1,4 @@
-name: Build eltenapp
+name: Build eltsetup
 
 on:
   push:
@@ -26,11 +26,11 @@ jobs:
       - name: Install zstd
         run: gem install zstd-ruby --no-document || true
 
-      - name: Build .eltenapp
-        run: ruby tools/build_eltenapp.rb build/MileByMile.eltenapp
+      - name: Build .eltsetup
+        run: ruby tools/build_eltenapp.rb build/MileByMile.eltsetup
 
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
-          files: build/MileByMile.eltenapp
+          files: build/MileByMile.eltsetup
           generate_release_notes: true

@@ -81,6 +81,9 @@ msgstr "A sua vez."
 msgid "The bot moves."
 msgstr "É a vez do bot."
 
+msgid "%{nick} moves next."
+msgstr "É a vez de %{nick}."
+
 msgid "You"
 msgstr "Você"
 
@@ -393,8 +396,8 @@ msgstr "As cartas de segurança jogam-se sobre si uma única vez e bloqueiam par
 msgid "If a card can't take effect (for example, refueling a full tank), it is simply discarded and the turn passes on."
 msgstr "Se uma carta não tiver efeito (por exemplo, abastecer com o depósito cheio), é simplesmente descartada e a vez passa."
 
-msgid "During the game: F2 — the last move, F4 — your distance and whether you can move. Escape — end the game."
-msgstr "Durante o jogo: F2 — a última jogada, F4 — a sua distância e se pode mover-se. Esc — terminar o jogo."
+msgid "During the game: Ctrl+M — the last move, Ctrl+S — your distance and whether you can move. Escape — end the game."
+msgstr "Durante o jogo: Ctrl+M — a última jogada, Ctrl+S — a sua distância e se pode mover-se. Esc — terminar o jogo."
 
 msgid "25 miles"
 msgstr "25 milhas"

@@ -81,6 +81,9 @@ msgstr "À vous de jouer."
 msgid "The bot moves."
 msgstr "Au tour du bot."
 
+msgid "%{nick} moves next."
+msgstr "Au tour de %{nick}."
+
 msgid "You"
 msgstr "Vous"
 
@@ -393,8 +396,8 @@ msgstr "Les cartes protection se jouent sur vous une seule fois et bloquent déf
 msgid "If a card can't take effect (for example, refueling a full tank), it is simply discarded and the turn passes on."
 msgstr "Si une carte ne peut pas avoir d’effet (par exemple faire le plein alors que le réservoir est plein), elle est simplement défaussée et le tour passe."
 
-msgid "During the game: F2 — the last move, F4 — your distance and whether you can move. Escape — end the game."
-msgstr "Pendant la partie : F2 — le dernier coup, F4 — votre distance et si vous pouvez avancer. Échap — terminer la partie."
+msgid "During the game: Ctrl+M — the last move, Ctrl+S — your distance and whether you can move. Escape — end the game."
+msgstr "Pendant la partie : Ctrl+M — le dernier coup, Ctrl+S — votre distance et si vous pouvez avancer. Échap — terminer la partie."
 
 msgid "25 miles"
 msgstr "25 milles"

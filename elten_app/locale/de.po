@@ -81,6 +81,9 @@ msgstr "Sie sind am Zug."
 msgid "The bot moves."
 msgstr "Der Bot ist am Zug."
 
+msgid "%{nick} moves next."
+msgstr "%{nick} ist am Zug."
+
 msgid "You"
 msgstr "Sie"
 
@@ -393,8 +396,8 @@ msgstr "Schutzkarten spielt man einmal auf sich selbst und blockieren dauerhaft 
 msgid "If a card can't take effect (for example, refueling a full tank), it is simply discarded and the turn passes on."
 msgstr "Kann eine Karte keine Wirkung entfalten (zum Beispiel Auftanken bei vollem Tank), wird sie einfach abgeworfen und der Zug geht weiter."
 
-msgid "During the game: F2 — the last move, F4 — your distance and whether you can move. Escape — end the game."
-msgstr "Während des Spiels: F2 — der letzte Zug, F4 — Ihre Distanz und ob Sie fahren können. Escape — Spiel beenden."
+msgid "During the game: Ctrl+M — the last move, Ctrl+S — your distance and whether you can move. Escape — end the game."
+msgstr "Während des Spiels: Ctrl+M — der letzte Zug, Ctrl+S — Ihre Distanz und ob Sie fahren können. Escape — Spiel beenden."
 
 msgid "25 miles"
 msgstr "25 Meilen"

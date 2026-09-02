@@ -81,6 +81,9 @@ msgstr "Twoja kolej."
 msgid "The bot moves."
 msgstr "Ruch bota."
 
+msgid "%{nick} moves next."
+msgstr "Ruch gracza %{nick}."
+
 msgid "You"
 msgstr "Ty"
 
@@ -393,8 +396,8 @@ msgstr "Karty ochronne wykłada się na siebie raz i na stałe blokują jeden ro
 msgid "If a card can't take effect (for example, refueling a full tank), it is simply discarded and the turn passes on."
 msgstr "Jeśli karta nie może zadziałać (na przykład tankujesz pełny bak), po prostu trafia na stos odrzuconych, a kolejka przechodzi dalej."
 
-msgid "During the game: F2 — the last move, F4 — your distance and whether you can move. Escape — end the game."
-msgstr "Podczas gry: F2 — ostatni ruch, F4 — twój dystans i czy możesz jechać. Escape — zakończ grę."
+msgid "During the game: Ctrl+M — the last move, Ctrl+S — your distance and whether you can move. Escape — end the game."
+msgstr "Podczas gry: Ctrl+M — ostatni ruch, Ctrl+S — twój dystans i czy możesz jechać. Escape — zakończ grę."
 
 msgid "25 miles"
 msgstr "25 mil"

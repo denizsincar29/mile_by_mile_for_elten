@@ -81,6 +81,9 @@ msgstr "Ваш хід."
 msgid "The bot moves."
 msgstr "Ходить бот."
 
+msgid "%{nick} moves next."
+msgstr "Ходить %{nick}."
+
 msgid "You"
 msgstr "Ви"
 
@@ -393,8 +396,8 @@ msgstr "Картки захисту ставляться на себе один 
 msgid "If a card can't take effect (for example, refueling a full tank), it is simply discarded and the turn passes on."
 msgstr "Якщо картка не може подіяти (наприклад, ви заливаєте бензин у повний бак), вона просто скидається і хід передається далі."
 
-msgid "During the game: F2 — the last move, F4 — your distance and whether you can move. Escape — end the game."
-msgstr "Під час гри: F2 — останній хід, F4 — ваша дистанція і чи можна їхати. Esc — закінчити гру."
+msgid "During the game: Ctrl+M — the last move, Ctrl+S — your distance and whether you can move. Escape — end the game."
+msgstr "Під час гри: Ctrl+M — останній хід, Ctrl+S — ваша дистанція і чи можна їхати. Esc — закінчити гру."
 
 msgid "25 miles"
 msgstr "25 миль"
