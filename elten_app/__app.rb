@@ -44,12 +44,20 @@ class ProgramMileByMile < Program
     finish
   end
 
+  # Ники и строки из уведомлений приходят в ASCII-8BIT. Приводим к UTF-8, чтобы
+  # интерполяция с переводами (не-ASCII) не падала Encoding::CompatibilityError.
+  def self.utf8(value)
+    s = value.to_s.dup
+    s.force_encoding(Encoding::UTF_8)
+    s.valid_encoding? ? s : s.scrub('')
+  end
+
   # Презентация уведомления приложения в центре уведомлений Elten.
   def self.map_notification(notification)
     return nil unless notification.type == 'game.invite'
 
     notification.presentation(
-      title: _('%{nick} invites you to Mile by Mile') % { nick: notification.sender.to_s },
+      title: _('%{nick} invites you to Mile by Mile') % { nick: utf8(notification.sender) },
       body: invite_settings_text(notification.metadata),
       sound: 'notification',
       action: :open_game
@@ -73,13 +81,15 @@ class ProgramMileByMile < Program
 
     def invite_settings_text(metadata)
       metadata ||= {}
-      variant = metadata['variant'].to_s == 'horses' ? _('On horses') : _('On cars')
-      distance = _('%{d} miles') % { d: (metadata['distance'] || 1000).to_i }
+      m = {}
+      metadata.each { |k, v| m[utf8(k)] = utf8(v) }
+      variant = m['variant'].to_s == 'horses' ? _('On horses') : _('On cars')
+      distance = _('%{d} miles') % { d: (m['distance'] || 1000).to_i }
       deck =
-        if metadata['deck_mode'].to_s == 'separate'
+        if m['deck_mode'].to_s == 'separate'
           _('Each player has their own deck')
         else
-          _(DECK_LABELS.fetch((metadata['deck_copies'] || 1).to_i, '1 common deck'))
+          _(DECK_LABELS.fetch((m['deck_copies'] || 1).to_i, '1 common deck'))
         end
       "#{variant}, #{distance}, #{deck}"
     end

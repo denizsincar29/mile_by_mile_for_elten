@@ -387,6 +387,15 @@ module MileByMileElten
       nil
     end
 
+    # Ники и строки из Communication API приходят в ASCII-8BIT. Приводим к
+    # UTF-8, чтобы конкатенация с переводами (не-ASCII) не падала
+    # Encoding::CompatibilityError.
+    def utf8(value)
+      s = value.to_s.dup
+      s.force_encoding(Encoding::UTF_8)
+      s.valid_encoding? ? s : s.scrub('')
+    end
+
     def packet_type(data)
       pkt = parse_packet(data)
       pkt && pkt['type']
@@ -442,7 +451,7 @@ module MileByMileElten
     def public_session_host(public_session)
       host = public_session.participants.find(&:owner?)
       host = public_session.participants.first if host.nil?
-      host&.user.to_s
+      utf8(host&.user)
     end
 
     # Описание публичной сессии для списка «Join a game»: хост + настройки.
@@ -494,7 +503,7 @@ module MileByMileElten
 
       if status == :ready
         guest = session.participants.find { |p| !p.owner? }
-        guest_nick = guest&.user.to_s
+        guest_nick = utf8(guest&.user)
         guest_nick = _('Opponent') if guest_nick.empty?
         start_hosted_game(variant, distance, deck_mode, deck_copies, guest_nick)
       else
@@ -652,7 +661,7 @@ module MileByMileElten
     # отклонить, войти в сессию хоста и сыграть. Отдельного «режима ожидания»
     # больше нет — меню приём приглашений держит само.
     def play_invited_game(invitation)
-      host_nick = invitation.sender.user
+      host_nick = utf8(invitation.sender.user)
       variant, distance, deck_mode, deck_copies = parse_settings(invitation.session_metadata)
 
       invite_text = (_('%{nick} invites you: %{settings}. Accept?') %
