@@ -786,6 +786,7 @@ module MileByMileElten
 
     # Ход игрока в мультиплеере: как human_turn, но ход уходит сопернику.
     def mp_human_turn
+      @pick_cursor = nil
       loop do
         return nil if @human.hand.empty?
 
@@ -917,6 +918,9 @@ module MileByMileElten
     # --- ход игрока ---
 
     def human_turn
+      # Новый ход начинается с первой карты; позиция курсора сохраняется
+      # только внутри серии ходов подряд (pick_card её запоминает).
+      @pick_cursor = nil
       loop do
         return nil if @human.hand.empty?
 
@@ -965,7 +969,7 @@ module MileByMileElten
         runner.on_key(:key_escape) do |current|
           current.stop(:aborted) if confirm(_('End the game?'))
         end
-        list = ListBox.new(options, header: header, index: 0, flags: ListBox::Flags::AnyDir, quiet: false)
+        list = ListBox.new(options, header: header, index: pick_index(options.size), flags: ListBox::Flags::AnyDir, quiet: false)
         mark_playable_cards(list)
         list.on(:select) { |selection| picked = selection[0] }
         runner.on_tick do
@@ -974,8 +978,20 @@ module MileByMileElten
         end
         list.focus
         return :aborted if runner.run == :aborted
-        return @human.hand[picked] if picked
+        next unless picked
+
+        @pick_cursor = picked
+        return @human.hand[picked]
       end
+    end
+
+    # Стартовая позиция курсора списка карт. Удержанный ход (защита) открывает
+    # список снова; чтобы фокус «остался на той же карте», где его оставил игрок,
+    # возвращаем позицию последнего выбора, ограниченную размером новой руки.
+    def pick_index(size)
+      return 0 if @pick_cursor.nil? || size <= 0
+
+      [@pick_cursor, size - 1].min
     end
 
     # Карты, которые сыграются с эффектом, помечаем статусом строки со звуком
