@@ -1,0 +1,36 @@
+name: Build eltenapp
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+
+      # tools/build_eltenapp.rb uses zstd-ruby when available, otherwise the
+      # system libzstd via Fiddle. Install the gem; ignore failure and let
+      # the Fiddle fallback pick up libzstd.so.1 (present on ubuntu-latest).
+      - name: Install zstd
+        run: gem install zstd-ruby --no-document || true
+
+      - name: Build .eltenapp
+        run: ruby tools/build_eltenapp.rb build/MileByMile.eltenapp
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/MileByMile.eltenapp
+          generate_release_notes: true
