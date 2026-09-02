@@ -35,6 +35,9 @@ module MileByMileElten
     # независимо от раскладки; без Ctrl буквы ничего не делают.
     KEY_LAST_MOVE = 0x4D # M
     KEY_STATUS = 0x53    # S
+    KEY_CHAT_SEND = 0xBF # /
+    KEY_CHAT_PREV = 0xDB # [
+    KEY_CHAT_NEXT = 0xDD # ]
 
     IMMOBILIZING = %i[stall empty_tank flat_tire accident].freeze
 
@@ -315,16 +318,10 @@ module MileByMileElten
       text
     end
 
-    # Основной цикл партии. Возвращает :aborted, если игрок подтвердил выход.
+    # Бот-партия: единый игровой экран (см. run_game_screen). Возвращает
+    # :aborted, если игрок подтвердил выход, иначе nil (партия доиграна).
     def play_rounds
-      until @game.finished?
-        if @game.current_player.equal?(@human)
-          return :aborted if human_turn == :aborted
-        else
-          return :aborted if bot_turn == :aborted
-        end
-      end
-      nil
+      run_game_screen == :aborted ? :aborted : nil
     end
 
     # --- мультиплеер ---
@@ -402,6 +399,38 @@ module MileByMileElten
       pkt && pkt['type']
     end
 
+    # Модальное окно с единственной кнопкой OK для важных сообщений («не
+    # удалось сделать X»). alert() просто читает текст и уходит; notice
+    # остаётся на экране, пока не нажмут Enter/Escape, — такую ошибку не
+    # потерять среди реплик. Строится на selector (заголовок — текст,
+    # единственный пункт — OK), как confirm.
+    def notice(text, header: nil)
+      body = utf8(text)
+      title = header.to_s.empty? ? body : "#{utf8(header)}: #{body}"
+      selector([_('OK')], header: title, start_index: 0, cancel_index: 0)
+      nil
+    end
+
+    # Ошибки движка (RuleViolation) приходят готовым английским текстом в обход
+    # gettext. Известные строки переводим через _() (msgid == текст движка),
+    # незнакомые оставляем как есть. Карта строится один раз — язык клиента в
+    # ходе сессии не меняется.
+    def localize_rule_error(message)
+      @rule_error_map ||= {
+        'the car must be repaired and started first' => _('the car must be repaired and started first'),
+        'the car cannot move' => _('the car cannot move'),
+        'speed limit: only 25 or 50 miles allowed' => _('speed limit: only 25 or 50 miles allowed'),
+        'the game is over' => _('the game is over'),
+        'this card is not in hand' => _('this card is not in hand'),
+        'a hazard card cannot be played on yourself' => _('a hazard card cannot be played on yourself'),
+        'this card can only be played on yourself' => _('this card can only be played on yourself'),
+        'a hazard card needs a target' => _('a hazard card needs a target'),
+        'a target is required' => _('a target is required'),
+        'no such player in this game' => _('no such player in this game')
+      }
+      @rule_error_map.fetch(message) { message }
+    end
+
     # Ожидание нужного события в Runner: Ctrl+M/Ctrl+S активны, Escape — отмена,
     # timeout секунд — выход по таймауту. Блок получает событие [kind,
     # payload] и возвращает true, когда событие «наше». Найденное событие
@@ -420,8 +449,8 @@ module MileByMileElten
         found = @inbox.delete_at(i)
         current.stop
       end
-      runner.run
-      found
+      stop_reason = runner.run
+      found || stop_reason
     end
 
     # Завершение сессии партии: хост закрывает её для всех, гость просто
@@ -478,7 +507,7 @@ module MileByMileElten
             public: true
           )
         rescue StandardError
-          alert(_('Cannot connect to the multiplayer server.'), false)
+          notice(_('Cannot connect to the multiplayer server.'))
           return
         end
       @session = session
@@ -508,7 +537,7 @@ module MileByMileElten
         guest_nick = _('Opponent') if guest_nick.empty?
         start_hosted_game(variant, distance, deck_mode, deck_copies, guest_nick)
       else
-        alert(_('No one joined the game.'), false)
+        notice(_('No one joined the game.'))
         teardown_session
       end
     end
@@ -520,7 +549,7 @@ module MileByMileElten
         begin
           communication_endpoint.public_sessions
         rescue StandardError
-          alert(_('Cannot connect to the multiplayer server.'), false)
+          notice(_('Cannot connect to the multiplayer server.'))
           return
         end
       sessions = sessions.reject(&:full?)
@@ -545,7 +574,7 @@ module MileByMileElten
         begin
           communication_endpoint.join(ps)
         rescue StandardError
-          alert(_('Cannot join the game.'), false)
+          notice(_('Cannot join the game.'))
           return
         end
       @session = session
@@ -588,11 +617,11 @@ module MileByMileElten
       nick = nick.strip
       card = user_card(nick)
       if card.nil?
-        alert(_('Cannot verify the user. Check the connection.'), false)
+        notice(_('Cannot verify the user. Check the connection.'))
         return
       end
       if card.name.to_s.empty?
-        alert(_('There is no user with this name.'), false)
+        notice(_('There is no user with this name.'))
         return
       end
       unless card.status.online
@@ -610,7 +639,7 @@ module MileByMileElten
             capacity: 2
           )
         rescue StandardError
-          alert(_('Cannot connect to the multiplayer server.'), false)
+          notice(_('Cannot connect to the multiplayer server.'))
           return
         end
       @session = session
@@ -620,7 +649,7 @@ module MileByMileElten
       begin
         session.invite(nick)
       rescue StandardError
-        alert(_('Cannot invite %{nick}.') % { nick: nick }, false)
+        notice(_('Cannot invite %{nick}.') % { nick: nick })
         teardown_session
         return
       end
@@ -653,7 +682,7 @@ module MileByMileElten
       when :accepted
         start_hosted_game(variant, distance, deck_mode, deck_copies, nick)
       else
-        alert(_('No response from %{nick}.') % { nick: nick }, false)
+        notice(_('No response from %{nick}.') % { nick: nick })
         teardown_session
       end
     end
@@ -676,7 +705,7 @@ module MileByMileElten
         begin
           invitation.accept
         rescue StandardError
-          alert(_('Cannot accept the invitation.'), false)
+          notice(_('Cannot accept the invitation.'))
           return
         end
       @session = session
@@ -714,7 +743,7 @@ module MileByMileElten
       @move_history = []
 
       unless @game.current_index == start['first']
-        alert(_('The game is out of sync. Return to the menu.'), false)
+        notice(_('The game is out of sync. Return to the menu.'))
         @multiplayer = false
         teardown_session
         return :cancelled
@@ -771,93 +800,19 @@ module MileByMileElten
       end
     end
 
-    # Цикл партии мультиплеера: ходит тот, кому по движку принадлежит ход.
-    # :aborted — игрок вышел (Escape, таймаут, соперник ушёл). Сессия
-    # закрывается в любом случае: на выходе — bye + закрытие, на финише —
-    # просто закрытие.
+    # Цикл партии мультиплеера — единый игровой экран (run_game_screen).
+    # Прерывание несёт причину (сам игрок вышел, соперник сдался/ушёл или
+    # потерял связь) — по ней выбирается фраза. Сессия закрывается в любом
+    # случае: на выходе — bye + закрытие, на финише — просто закрытие.
     def finish_mp_rounds
-      aborted = false
-      until @game.finished?
-        if @game.current_player.equal?(@human)
-          aborted = true if mp_human_turn == :aborted
-        else
-          aborted = true if mp_opponent_turn == :aborted
-        end
-        break if aborted
-      end
-      if aborted
-        send_mp_bye
-        alert(_('The game is over.'), true)
+      reason = run_game_screen
+      if reason
+        reason = :self_quit if reason == :aborted
+        announce_mp_abort(reason)
       else
         announce_mp_result
       end
       teardown_session
-    end
-
-    # Ход игрока в мультиплеере: как human_turn, но ход уходит сопернику.
-    def mp_human_turn
-      @pick_cursor = nil
-      loop do
-        return nil if @human.hand.empty?
-
-        card = pick_card
-        return :aborted if card == :aborted
-
-        target = card.opponent_only? ? @opponent : nil
-        before = @human.hand.dup
-        idx = before.index(card)
-        ctx = play_context(@human, target)
-        begin
-          result = @game.play(card, target: target)
-        rescue MileByMile::Game::RuleViolation => e
-          alert(e.message, false)
-          next
-        end
-
-        send_mp_move(idx, card)
-        play_card_audio(card, result, @human, target, ctx)
-        action = record_move(@human, card, target: target, result: result)
-        drawn = (@human.hand - before).first
-        line = drawn ? "#{action} #{draw_phrase(@human, drawn)}" : action
-
-        if @game.finished?
-          alert(action, false)
-          return nil
-        else
-          tail = turn_tail(human_moved: true)
-          alert(tail.empty? ? line : "#{line} #{tail}", true)
-          return nil unless @game.current_player.equal?(@human)
-        end
-      end
-    end
-
-    # Ход соперника: ждём move, применяем к своему движку, озвучиваем.
-    # Выход соперника видим как bye, участник_left или закрытие сессии.
-    def mp_opponent_turn
-      result = wait_for_events(timeout: 300, cancel_text: _('End the game?')) do |kind, payload|
-        case kind
-        when :reliable
-          type = packet_type(payload.data)
-          type == 'move' || type == 'bye'
-        when :participant_left, :session_closed
-          true
-        else
-          false
-        end
-      end
-      return :aborted if result.nil? || result == :timeout || result == :cancelled
-
-      kind, payload = result
-      case kind
-      when :participant_left, :session_closed
-        :aborted
-      when :reliable
-        pkt = parse_packet(payload.data)
-        return :aborted if pkt.nil? || pkt['type'] == 'bye'
-
-        apply_opponent_move(pkt)
-        nil
-      end
     end
 
     # Применить ход соперника к локальному движку и озвучить, как в ухе.
@@ -897,6 +852,75 @@ module MileByMileElten
       nil
     end
 
+    # --- чат в партии (только мультиплеер) ---
+
+    # Хоткеи чата активны в едином игровом экране партии мультиплеера.
+    # Модификатор обязателен: голые символы в списке карт ушли бы в быстрый
+    # поиск Элтена (см. план 0.4.6).
+    def bind_chat_hotkeys(runner)
+      runner.on_key(KEY_CHAT_SEND) { compose_chat_message if main_modifier? }
+      runner.on_key(KEY_CHAT_PREV) { browse_chat(-1) if main_modifier? }
+      runner.on_key(KEY_CHAT_NEXT) { browse_chat(+1) if main_modifier? }
+    end
+
+    # Ctrl+/: модальный ввод сообщения (как invite_friend). Пустое сообщение
+    # просто не шлём. Echo кладём в локальную историю.
+    def compose_chat_message
+      text = input_text(_('Write a message'), escapable: true, text: '')
+      if text.nil?
+        return
+      elsif text.strip.empty?
+        speak(_('The message is empty.'))
+        return
+      end
+
+      text = text.strip
+      @chat_history << [_('You'), text]
+      @chat_history.shift if @chat_history.size > 30
+      send_mp_json('type' => 'chat', 'text' => text)
+    rescue StandardError
+      nil
+    end
+
+    # Вынуть все входящие сообщения чата из @inbox: озвучить и положить в
+    # историю. Крутится каждый тик в любой фазе — игровые пакеты (move/bye)
+    # не трогает, на ход соперника не влияет.
+    def drain_chat
+      @inbox.delete_if do |kind, payload|
+        next false unless kind == :reliable
+
+        pkt = parse_packet(payload.data)
+        next false unless pkt && pkt['type'] == 'chat'
+
+        text = pkt['text'].to_s.strip
+        next false if text.empty?
+
+        nick = @opponent ? @opponent.name.to_s : _('You')
+        @chat_history << [nick, text]
+        @chat_history.shift if @chat_history.size > 30
+        speak("#{nick}: #{text}")
+        true
+      end
+    end
+
+    # Ctrl+[/Ctrl+]: пролистать историю чата и озвучить сообщение под курсором,
+    # не прерывая игру. Курсор ходит по кольцу в границах истории.
+    def browse_chat(delta)
+      if @chat_history.empty?
+        speak(_('No chat messages yet.'))
+        return
+      end
+
+      if @chat_cursor.nil?
+        # первый листающий показ начинается с самого свежего сообщения
+        @chat_cursor = delta.negative? ? @chat_history.size - 1 : 0
+      else
+        @chat_cursor = (@chat_cursor + delta) % @chat_history.size
+      end
+      nick, text = @chat_history[@chat_cursor]
+      speak("#{nick}: #{text}")
+    end
+
     def announce_mp_result
       winner = @game.winner
       if winner.equal?(@human)
@@ -907,6 +931,22 @@ module MileByMileElten
         alert((_('%{nick} is at the finish line.') % { nick: @opponent.name }), true)
       else
         alert(_('The deck ran out. Draw.'), true)
+      end
+    end
+
+    # Фраза при прерывании партии раньше финиша. Ключевая разница — кто ушёл:
+    # соперник сдался/пропал (своя фраза и для потери связи), сам игрок вышел
+    # (обычный конец). bye шлём только когда уходим мы сами — сопернику уже
+    # не до сообщений, если ушёл он.
+    def announce_mp_abort(reason)
+      case reason
+      when :self_quit
+        send_mp_bye
+        alert(_('The game is over.'), true)
+      when :opponent_connection_lost
+        alert((_('%{nick} lost the connection.') % { nick: @opponent.name }), true)
+      else
+        alert((_('%{nick} left the game and conceded.') % { nick: @opponent.name }), true)
       end
     end
 
@@ -925,73 +965,215 @@ module MileByMileElten
       text.sub(_('The bot'), player.name)
     end
 
-    # --- ход игрока ---
+    # --- единый игровой экран ---
 
-    def human_turn
-      # Новый ход начинается с первой карты; позиция курсора сохраняется
-      # только внутри серии ходов подряд (pick_card её запоминает).
+    # Вся партия — один ListBox руки + один Runner (бот и мультиплеер).
+    # Список не закрывается между ходами: на чужом ходу его можно листать,
+    # ходы соперника/бота озвучиваются поверх открытого списка, рука после
+    # добора обновляется на месте. Возвращает, чем закончился цикл:
+    #   nil — партия доиграна (результат озвучивает вызывающий);
+    #   :aborted — игрок подтвердил выход (Escape);
+    #   :opponent_left / :opponent_connection_lost / :opponent_timeout — :mp.
+    def run_game_screen
+      @pending_pick = nil
       @pick_cursor = nil
-      loop do
-        return nil if @human.hand.empty?
+      @phase = nil
+      @chat_history = []
+      @chat_cursor = nil
 
-        card = pick_card
-        return :aborted if card == :aborted
+      runner = Runner.new
+      bind_game_hotkeys(runner)
+      bind_chat_hotkeys(runner) if @multiplayer
+      runner.on_key(:key_escape) { |current| current.stop(:aborted) if confirm(_('End the game?')) }
+      # сторож хода соперника: 5 минут без хода — считаем, что он вышел
+      runner.after(300) { |current| current.stop(:opponent_timeout) if @multiplayer && @phase == :opponent }
 
-        target = card.opponent_only? ? @bot_player : nil
-        before = @human.hand.dup
-        ctx = play_context(@human, target)
-        begin
-          result = @game.play(card, target: target)
-        rescue MileByMile::Game::RuleViolation => e
-          alert(e.message, false)
-          next
-        end
-
-        play_card_audio(card, result, @human, target, ctx)
-        action = record_move(@human, card, target: target, result: result)
-        # карта добирается только при удержанном ходе (защита) — озвучиваем
-        # тут же; при переходе хода к боту добор придёт в начале хода игрока
-        drawn = (@human.hand - before).first
-        line = drawn ? "#{action} #{draw_phrase(@human, drawn)}" : action
-
-        if @game.finished?
-          alert(action, false)
-          return nil
+      options = @human.hand.map { |c| _(c.name) }
+      list = ListBox.new(options, header: '', index: pick_index(options.size), flags: ListBox::Flags::AnyDir, quiet: false)
+      list.on(:select) do |selection|
+        if @phase == :human
+          @pending_pick = selection[0]
         else
-          tail = turn_tail(human_moved: true)
-          alert(tail.empty? ? line : "#{line} #{tail}", true)
-          return nil unless @game.current_player.equal?(@human)
+          speak(_('Not your turn.'))
         end
+      end
+
+      if @game.current_player.equal?(@human)
+        enter_human_phase(list)
+      else
+        enter_opponent_phase(list, runner)
+      end
+      list.focus
+
+      runner.on_tick do |current|
+        drain_chat if @multiplayer
+        if @phase == :opponent
+          event = poll_opponent_event
+          handle_opponent_event(event, list, current) if event
+        elsif @phase == :human && @pending_pick
+          pick = @pending_pick
+          @pending_pick = nil
+          handle_human_pick(list, pick, current)
+        end
+        list.update
+      end
+
+      runner.run
+    end
+
+    # Новый ход игрока: курсор на первую карту, рука перерисована на месте.
+    def enter_human_phase(list)
+      @pick_cursor = nil
+      @phase = :human
+      refresh_hand_list(list)
+      list.index = 0
+    end
+
+    # Ход ушёл не игроку: в мультиплеере ждём событие, у бота — пауза «думает».
+    def enter_opponent_phase(list, current)
+      if @multiplayer
+        @phase = :opponent
+      else
+        @phase = :bot
+        schedule_bot_move(list, current)
       end
     end
 
-    # Список карт руки на ListBox внутри Runner: Enter выбирает карту,
-    # Ctrl+M/Ctrl+S/Escape активны всё время хода. Возвращает карту или :aborted.
-    # Заголовок списка пустой: «Ваш ход» уже сказан хвостом предыдущего анонса
-    # (turn_tail) — заголовок дублировал бы его отдельной репликой.
-    def pick_card
-      loop do
-        options = @human.hand.map { |c| _(c.name) }
-        header = ''
-        picked = nil
-        runner = Runner.new
-        bind_game_hotkeys(runner)
-        runner.on_key(:key_escape) do |current|
-          current.stop(:aborted) if confirm(_('End the game?'))
-        end
-        list = ListBox.new(options, header: header, index: pick_index(options.size), flags: ListBox::Flags::AnyDir, quiet: false)
-        mark_playable_cards(list)
-        list.on(:select) { |selection| picked = selection[0] }
-        runner.on_tick do
-          list.update
-          runner.stop if picked != nil
-        end
-        list.focus
-        return :aborted if runner.run == :aborted
-        next unless picked
+    # Перерисовать список руки на месте: новые имена, пометки, индекс в границы.
+    # Ничего не озвучивает — options= не трогает позицию курсора, сдвиг индекса
+    # говорится на следующем update (и то лишь при реальном сдвиге).
+    def refresh_hand_list(list)
+      return if list.nil?
 
-        @pick_cursor = picked
-        return @human.hand[picked]
+      size = @human.hand.size
+      list.options = @human.hand.map { |c| _(c.name) }
+      list.index = size.zero? ? 0 : [list.index.to_i, size - 1].min
+      mark_playable_cards(list)
+    end
+
+    # Сыграть карту, выбранную игроком (Enter в списке на своём ходу).
+    def handle_human_pick(list, pick, current)
+      return if pick.nil? || pick >= @human.hand.size
+
+      card = @human.hand[pick]
+      opponent = @multiplayer ? @opponent : @bot_player
+      target = card.opponent_only? ? opponent : nil
+      before = @human.hand.dup
+      ctx = play_context(@human, target)
+      begin
+        result = @game.play(card, target: target)
+      rescue MileByMile::Game::RuleViolation => e
+        alert(localize_rule_error(e.message), false)
+        return
+      end
+
+      send_mp_move(pick, card) if @multiplayer
+      play_card_audio(card, result, @human, target, ctx)
+      @pick_cursor = pick
+      action = record_move(@human, card, target: target, result: result)
+      # добор при удержанном ходе (первая защита) уже в руке — озвучиваем тут же
+      drawn = (@human.hand - before).first
+      line = drawn ? "#{action} #{draw_phrase(@human, drawn)}" : action
+
+      if @game.finished?
+        alert(action, false)
+        current.stop
+      elsif @game.current_player.equal?(@human)
+        refresh_hand_list(list)
+        tail = turn_tail(human_moved: true)
+        alert(tail.empty? ? line : "#{line} #{tail}", true)
+      else
+        tail = turn_tail(human_moved: true)
+        alert(tail.empty? ? line : "#{line} #{tail}", true)
+        enter_opponent_phase(list, current)
+      end
+    end
+
+    # Пауза «бот думает» (рандом @bot.think_duration), затем — его ход.
+    def schedule_bot_move(list, current)
+      current.after(@bot.think_duration) { |runner| play_bot_move(list, runner) }
+    end
+
+    # Ход бота: как раньше bot_turn, но живёт внутри единого экрана — после
+    # хода список остаётся открытым, ход при удержании цепляется заново.
+    def play_bot_move(list, current)
+      card, target = @bot.choose_move
+      if card.nil?
+        current.stop
+        return
+      end
+
+      human_before = @human.hand.dup
+      ctx = play_context(@bot_player, target)
+      begin
+        result = @game.play(card, target: target)
+      rescue MileByMile::Game::RuleViolation
+        fallback = @bot_player.hand.find { |c| c.is_a?(RemedyCard) || c.is_a?(SafetyCard) }
+        if fallback.nil?
+          current.stop
+          return
+        end
+        result = @game.play(fallback, target: nil)
+        card = fallback
+      end
+
+      play_card_audio(card, result, @bot_player, target, ctx)
+      text = record_move(@bot_player, card, target: target, result: result)
+      drawn = (@human.hand - human_before).first
+      if drawn && !@game.finished? && @game.current_player.equal?(@human)
+        text += " #{draw_phrase(@human, drawn)}"
+      end
+      tail = turn_tail(human_moved: false)
+      alert(tail.empty? ? text : "#{text} #{tail}", true)
+
+      if @game.finished?
+        current.stop
+      elsif @game.current_player.equal?(@human)
+        enter_human_phase(list)
+      else
+        schedule_bot_move(list, current)
+      end
+    end
+
+    # Достать из @inbox событие хода соперника (move/bye/participant_left/
+    # session_closed). Вызывается каждый тик фазы :opponent.
+    def poll_opponent_event
+      index = @inbox.index do |event|
+        kind, payload = event
+        case kind
+        when :reliable
+          type = packet_type(payload.data)
+          type == 'move' || type == 'bye'
+        when :participant_left, :session_closed
+          true
+        else
+          false
+        end
+      end
+      index && @inbox.delete_at(index)
+    end
+
+    # Событие хода соперника из очереди: move применяется к локальному движку
+    # и озвучивается (apply_opponent_move), уход/закрытие — причина остановки.
+    def handle_opponent_event(event, list, current)
+      kind, payload = event
+      case kind
+      when :participant_left
+        current.stop(:opponent_left)
+      when :session_closed
+        current.stop(payload == :connection_lost ? :opponent_connection_lost : :opponent_left)
+      when :reliable
+        pkt = parse_packet(payload.data)
+        return current.stop(:opponent_left) if pkt.nil? || pkt['type'] == 'bye'
+
+        apply_opponent_move(pkt)
+        if @game.finished?
+          current.stop
+        elsif @game.current_player.equal?(@human)
+          enter_human_phase(list)
+        else
+          @phase = :opponent
+        end
       end
     end
 
@@ -1019,54 +1201,6 @@ module MileByMileElten
 
         list.set_item_status(index, 'listbox_itempinned', '', '')
       end
-    end
-
-    # --- ход бота ---
-
-    def bot_turn
-      return :aborted if bot_think == :aborted
-
-      card, target = @bot.choose_move
-      return nil if card.nil?
-
-      human_before = @human.hand.dup
-      ctx = play_context(@bot_player, target)
-      begin
-        result = @game.play(card, target: target)
-      rescue MileByMile::Game::RuleViolation
-        fallback = @bot_player.hand.find { |c| c.is_a?(RemedyCard) || c.is_a?(SafetyCard) }
-        return nil unless fallback
-
-        result = @game.play(fallback, target: nil)
-        card = fallback
-      end
-
-      play_card_audio(card, result, @bot_player, target, ctx)
-      # ход бота озвучивается сразу, как событие (wait: блокируем, чтобы
-      # «Ваш ход» в следующем списке не перебил его) — как в ухе
-      text = record_move(@bot_player, card, target: target, result: result)
-      # после хода бота игрок добирает карту для своего хода — в ухе она
-      # озвучивается одной фразой перед списком «Ваш ход»
-      drawn = (@human.hand - human_before).first
-      if drawn && !@game.finished? && @game.current_player.equal?(@human)
-        text += " #{draw_phrase(@human, drawn)}"
-      end
-      tail = turn_tail(human_moved: false)
-      alert(tail.empty? ? text : "#{text} #{tail}", true)
-      nil
-    end
-
-    # Пауза перед ходом бота: рандом 2-4 секунды (сложный выбор — до ~5.5).
-    # В это время Ctrl+M/Ctrl+S/Escape активны. Ничего не озвучиваем — сам ход бота
-    # проговорится сразу после паузы (как в ухе).
-    def bot_think
-      runner = Runner.new
-      bind_game_hotkeys(runner)
-      runner.on_key(:key_escape) do |current|
-        current.stop(:aborted) if confirm(_('End the game?'))
-      end
-      runner.after(@bot.think_duration) { |current| current.stop }
-      runner.run == :aborted ? :aborted : nil
     end
 
     # --- история ходов и статусы ---
@@ -1318,7 +1452,8 @@ module MileByMileElten
         _('Remedy cards fix your own car: start the engine, refuel, fix the tire, repair after accident, end of U-turn, end of speed limit.'),
         _('Safety cards are played on yourself once and permanently block one kind of hazard. Playing one for the first time keeps your turn.'),
         _("If a card can't take effect (for example, refueling a full tank), it is simply discarded and the turn passes on."),
-        _('During the game: Ctrl+M — the last move, Ctrl+S — your distance and whether you can move. Escape — end the game.')
+        _('During the game: Ctrl+M — the last move, Ctrl+S — your distance and whether you can move. Escape — end the game.'),
+        _('In a multiplayer game, Ctrl+/ — write a message, Ctrl+[ and Ctrl+] — read the chat history.')
       ].join("\n\n"), header: _('Rules'))
     end
   end

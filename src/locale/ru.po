@@ -581,3 +581,85 @@ msgstr "Не удалось пригласить %{nick}."
 
 msgid "Cannot accept the invitation."
 msgstr "Не удалось принять приглашение."
+
+msgid "%{nick} left the game and conceded."
+msgstr "%{nick} вышел из игры и признал поражение."
+
+msgid "%{nick} lost the connection."
+msgstr "%{nick} потерял соединение."
+
+msgid "Cancel waiting for an opponent?"
+msgstr "Отменить ожидание соперника?"
+
+msgid "Cannot join the game."
+msgstr "Не удалось присоединиться к игре."
+
+msgid "Friend nickname"
+msgstr "Ник друга"
+
+msgid "In a multiplayer game, Ctrl+/ — write a message, Ctrl+[ and Ctrl+] — read the chat history."
+msgstr "В сетевой игре: Ctrl+/ — написать сообщение, Ctrl+[ и Ctrl+] — читать историю чата."
+
+msgid "Invite a friend"
+msgstr "Пригласить друга"
+
+msgid "Join a game"
+msgstr "Присоединиться к игре"
+
+msgid "No chat messages yet."
+msgstr "Сообщений в чате ещё нет."
+
+msgid "No games in the lobby yet."
+msgstr "В лобби пока нет игр."
+
+msgid "No one joined the game."
+msgstr "Никто не присоединился к игре."
+
+msgid "Not your turn."
+msgstr "Сейчас не ваш ход."
+
+msgid "Opponent"
+msgstr "Соперник"
+
+msgid "The game is open in the lobby. Waiting for an opponent. Escape — cancel."
+msgstr "Игра открыта в лобби. Ожидание соперника. Escape — отмена."
+
+msgid "The message is empty."
+msgstr "Сообщение пустое."
+
+msgid "Unknown player"
+msgstr "Неизвестный игрок"
+
+msgid "Write a message"
+msgstr "Напишите сообщение"
+
+msgid "a hazard card cannot be played on yourself"
+msgstr "карту опасности нельзя сыграть на себя"
+
+msgid "a hazard card needs a target"
+msgstr "для карты опасности нужна цель"
+
+msgid "a target is required"
+msgstr "нужна цель"
+
+msgid "no such player in this game"
+msgstr "нет такого игрока в этой игре"
+
+msgid "speed limit: only 25 or 50 miles allowed"
+msgstr "ограничение скорости: можно только 25 или 50 миль"
+
+msgid "the car cannot move"
+msgstr "машина не может ехать"
+
+msgid "the car must be repaired and started first"
+msgstr "сначала нужно отремонтировать и завести машину"
+
+msgid "the game is over"
+msgstr "игра окончена"
+
+msgid "this card can only be played on yourself"
+msgstr "эту карту можно сыграть только на себя"
+
+msgid "this card is not in hand"
+msgstr "этой карты нет в руке"
+

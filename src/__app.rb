@@ -3,8 +3,8 @@
 {
   "id": "ce5cff0e-6a9e-43da-afb3-d050b0ffc4ae",
   "name": "MileByMile",
-  "version": "0.4.5",
-  "build_id": 10,
+  "version": "0.4.6",
+  "build_id": 11,
   "EltenAPIVersion": "3.0",
   "author": "denizsincar29",
   "main_language": "en",

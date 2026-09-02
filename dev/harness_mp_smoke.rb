@@ -143,6 +143,11 @@ def display_text(text, header: '', **_kw)
   DISPLAYED_TEXT << [header, text]
 end
 
+# ListBox stub for the unified game screen: the SAME list instance lives for
+# the whole game, so "the human plays the focused card on each of their turns"
+# is simulated by re-firing :select whenever the list is refreshed (options=)
+# while that side's phase is :human. Ownership is thread-local — the host and
+# guest UIs run in separate threads with their own lists.
 class ListBox
   module Flags
     MultiSelection = 1
@@ -150,13 +155,15 @@ class ListBox
     HotKeys = 32
   end
 
-  attr_reader :index, :options
+  attr_accessor :index
+  attr_reader :options
 
   def initialize(options, header: '', index: 0, flags: 0, quiet: false, **_kw)
     @options = options
     @index = index
+    @owner = Thread.current[:miley_ui]
     @events = Hash.new { |h, k| h[k] = [] }
-    @updated = false
+    @armed = false
   end
 
   def on(event, &block)
@@ -166,11 +173,24 @@ class ListBox
 
   def focus(*_args); end
 
-  def update
-    return if @updated || @options.empty?
+  def set_item_status(*_args); end
 
-    @updated = true
-    @index = 0
+  def human_phase?
+    ui = @owner
+    ui && ui.instance_variable_get(:@phase) == :human
+  end
+
+  def options=(opts)
+    @options = opts
+    @armed = human_phase? && !opts.empty?
+  end
+
+  def update
+    return unless human_phase?
+    return if @owner.instance_variable_get(:@pending_pick)
+    return unless @armed && !@options.empty?
+
+    @armed = false
     @events[:select].each { |block| block.call([@index]) }
   end
 end
@@ -308,6 +328,12 @@ class FakeSession
     self
   end
 
+  def on_participant_joined(&block)
+    @callbacks[:participant_joined] << block
+    flush_pending(:participant_joined)
+    self
+  end
+
   def on_participant_left(&block)
     @callbacks[:participant_left] << block
     self
@@ -316,6 +342,14 @@ class FakeSession
   def on_closed(&block)
     @callbacks[:closed] << block
     self
+  end
+
+  def deliver_participant_joined(participant)
+    if @callbacks[:participant_joined].any?
+      @callbacks[:participant_joined].each { |b| b.call(participant) }
+    else
+      @pending << [:participant_joined, participant]
+    end
   end
 
   def participants
@@ -468,6 +502,10 @@ class Transport
     end
   end
 
+  def guest_session(host_session)
+    @mutex.synchronize { @sessions[host_session.id][:guest] }
+  end
+
   def invite(host_nick, guest_nick, session)
     @mutex.synchronize do
       rec = @sessions[session.id]
@@ -529,57 +567,79 @@ class Transport
   end
 end
 
-# --- run the two-sided game ---
-GAMES = (ARGV[0] || 5).to_i
-errors = 0
+# --- run the two-sided game through the unified game screen ---
 
-GAMES.times do |i|
-  Thread.abort_on_exception = true
-  ALERTS.clear
-  SPEECH.clear
+# Wire a host/guest UI pair over the in-memory transport: host creates the
+# session and both sides register their session listeners up front (the same
+# contract start_hosted_game / join_and_wait_start expect on the real client).
+def link_game
   transport = Transport.new
   host_prog = FakeProgram.new('Host', transport)
   guest_prog = FakeProgram.new('Guest', transport)
-
   host_ui = MileByMileElten::UI.new(host_prog)
   guest_ui = MileByMileElten::UI.new(guest_prog)
   transport.register('Host', host_prog.communication)
   transport.register('Guest', guest_prog.communication)
 
-  $form_values_script = [[0, 1, 3]] # cars, 2000 miles, 3 common decks
-  $input_text_result = 'Guest'
+  host_session = host_prog.communication.create_session(metadata: {})
+  transport.invite('Host', 'Guest', host_session)
+  guest_session = transport.guest_session(host_session)
 
-  host_result = nil
-  guest_result = nil
-  host_thread = Thread.new { host_result = host_ui.send(:host_game) }
-  guest_thread = Thread.new { guest_result = guest_ui.send(:wait_for_invite) }
+  host_ui.instance_variable_set(:@session, host_session)
+  host_ui.instance_variable_set(:@mp_host, true)
+  host_ui.send(:register_session_listeners, host_session)
+  guest_ui.instance_variable_set(:@session, guest_session)
+  guest_ui.instance_variable_set(:@mp_host, false)
+  guest_ui.send(:register_session_listeners, guest_session)
 
-  # watchdog: fail loudly instead of hanging forever on a desync
+  [transport, host_prog, guest_prog, host_ui, guest_ui, host_session, guest_session]
+end
+
+# Start host + guest threads. The unified ListBox stub needs its owning UI in a
+# thread-local, since both sides run concurrently in their own threads.
+def spawn_pair(host_ui, guest_ui, distance, seconds: 60)
+  result = {}
+  host_thread = Thread.new do
+    Thread.current[:miley_ui] = host_ui
+    result[:host] = host_ui.send(:start_hosted_game, :cars, distance, :shared, 3, 'Guest')
+  end
+  guest_thread = Thread.new do
+    Thread.current[:miley_ui] = guest_ui
+    result[:guest] = guest_ui.send(:join_and_wait_start, 'Host', :cars, distance, :shared, 3)
+  end
   watchdog = Thread.new do
-    sleep 30
+    sleep seconds
     host_thread.kill
     guest_thread.kill
-    abort "MP SMOKE ##{i} HUNG (possible desync)"
+    abort "MP SMOKE HUNG (desync, distance=#{distance})"
   end
+  [result, host_thread, guest_thread, watchdog]
+end
 
+errors = 0
+
+# Scenario 1: N full two-sided games to a natural finish, engines in sync.
+GAMES = (ARGV[0] || 5).to_i
+GAMES.times do |i|
+  Thread.abort_on_exception = true
+  ALERTS.clear
+  SPEECH.clear
+  _transport, _hp, _gp, host_ui, guest_ui, host_session, guest_session = link_game
+  result, host_thread, guest_thread, watchdog = spawn_pair(host_ui, guest_ui, 1000, seconds: 30)
   host_thread.join
   guest_thread.join
   watchdog.kill
 
   hg = host_ui.instance_variable_get(:@game)
   gg = guest_ui.instance_variable_get(:@game)
-  # сессия обнуляется в teardown — пакеты считаем через endpoint'ы
-  host_sent = host_prog.communication.session&.sent || []
-  guest_sent = guest_prog.communication.session&.sent || []
-  guest_received = guest_prog.communication.session&.received || []
-  host_moves = host_sent.count { |d| parse_move?(d) }
-  guest_moves = guest_sent.count { |d| parse_move?(d) }
-  host_start = host_sent.any? { |d| parse_type?(d) == 'start' }
-  guest_got_start = guest_received.any? { |d| parse_type?(d) == 'start' }
+  host_moves = host_session.sent.count { |d| parse_move?(d) }
+  guest_moves = guest_session.sent.count { |d| parse_move?(d) }
+  host_start = host_session.sent.any? { |d| parse_type?(d) == 'start' }
+  guest_got_start = guest_session.received.any? { |d| parse_type?(d) == 'start' }
 
   ok = true
-  ok = false unless host_result == :played
-  ok = false unless guest_result == :played
+  ok = false unless result[:host] == :played
+  ok = false unless result[:guest] == :played
   ok = false unless hg.finished? && gg.finished?
   ok = false unless host_moves + guest_moves > 0
   ok = false unless host_start
@@ -590,14 +650,58 @@ GAMES.times do |i|
   widx_g = gg.players.index(gg.winner)
   ok = false unless widx_h == widx_g
 
-  puts "MP GAME ##{i}: host=#{host_result.inspect} guest=#{guest_result.inspect} " \
-       "host_finished=#{hg.finished?} guest_finished=#{gg.finished?} " \
-       "moves(host=#{host_moves},guest=#{guest_moves}) " \
-       "start(host=#{host_start},guest=#{guest_got_start}) " \
+  puts "MP GAME ##{i}: host=#{result[:host].inspect} guest=#{result[:guest].inspect} " \
+       "finished(h=#{hg.finished?},g=#{gg.finished?}) " \
+       "moves(h=#{host_moves},g=#{guest_moves}) " \
+       "start(sent=#{host_start},got=#{guest_got_start}) " \
        "winner_slot(h=#{widx_h.inspect},g=#{widx_g.inspect}) sync=#{ok ? 'yes' : 'NO'}"
 
   errors += 1 unless ok
 end
+
+# Scenario 2: in-game chat (Ctrl+/ both ways) then the opponent quits mid-game.
+Thread.abort_on_exception = true
+ALERTS.clear
+SPEECH.clear
+transport, _hp, _gp, host_ui, guest_ui, _host_session, guest_session = link_game
+result, host_thread, guest_thread, watchdog = spawn_pair(host_ui, guest_ui, 1_000_000, seconds: 20)
+sleep 0.3 # let both sides reach the unified screen and open a session
+
+$input_text_result = 'hello from host'
+host_ui.send(:compose_chat_message)
+deadline = Time.now + 4
+until guest_ui.instance_variable_get(:@chat_history).any? { |_n, t| t == 'hello from host' } || Time.now > deadline
+  sleep 0.02
+end
+guest_got_msg = guest_ui.instance_variable_get(:@chat_history).any? { |n, t| n == 'Host' && t == 'hello from host' }
+host_echo = host_ui.instance_variable_get(:@chat_history).any? { |n, t| n == 'You' && t == 'hello from host' }
+
+$input_text_result = 'hi from guest'
+guest_ui.send(:compose_chat_message)
+deadline = Time.now + 4
+until host_ui.instance_variable_get(:@chat_history).any? { |_n, t| t == 'hi from guest' } || Time.now > deadline
+  sleep 0.02
+end
+host_got_reply = host_ui.instance_variable_get(:@chat_history).any? { |n, t| n == 'Guest' && t == 'hi from guest' }
+guest_echo = guest_ui.instance_variable_get(:@chat_history).any? { |n, t| n == 'You' && t == 'hi from guest' }
+heard = SPEECH.any? { |s| s.include?('hello from host') } && SPEECH.any? { |s| s.include?('hi from guest') }
+
+# соперник (гость) уходит посреди партии — хост должен увидеть сдачу, а не
+# «The game is over»: в ALERTS обязана появиться фраза c 'conceded'
+transport.leave_session(guest_session)
+host_thread.join
+guest_thread.join
+watchdog.kill
+
+hg = host_ui.instance_variable_get(:@game)
+conceded = ALERTS.any? { |a| a.include?('conceded') }
+host_not_finished = !hg.finished?
+
+chat_ok = guest_got_msg && host_echo && host_got_reply && guest_echo && heard
+puts "CHAT: host->guest=#{guest_got_msg} echo(host)=#{host_echo} guest->host=#{host_got_reply} echo(guest)=#{guest_echo} speech=#{heard} all=#{chat_ok ? 'yes' : 'NO'}"
+puts "CONCEDE on host: message=#{conceded} game_not_finished=#{host_not_finished} ok=#{conceded && host_not_finished ? 'yes' : 'NO'}"
+errors += 1 unless chat_ok
+errors += 1 unless conceded && host_not_finished
 
 puts errors.zero? ? 'ALL MP GAMES IN SYNC' : "MP FAILURES: #{errors}"
 exit(errors.zero? ? 0 : 1)

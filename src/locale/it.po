@@ -578,3 +578,88 @@ msgstr "Impossibile invitare %{nick}."
 
 msgid "Cannot accept the invitation."
 msgstr "Impossibile accettare l'invito."
+
+msgid "%{nick} invites you to Mile by Mile"
+msgstr ""
+
+msgid "%{nick} left the game and conceded."
+msgstr ""
+
+msgid "%{nick} lost the connection."
+msgstr ""
+
+msgid "Cancel waiting for an opponent?"
+msgstr ""
+
+msgid "Cannot join the game."
+msgstr ""
+
+msgid "Friend nickname"
+msgstr ""
+
+msgid "In a multiplayer game, Ctrl+/ — write a message, Ctrl+[ and Ctrl+] — read the chat history."
+msgstr ""
+
+msgid "Invite a friend"
+msgstr ""
+
+msgid "Join a game"
+msgstr ""
+
+msgid "No chat messages yet."
+msgstr ""
+
+msgid "No games in the lobby yet."
+msgstr ""
+
+msgid "No one joined the game."
+msgstr ""
+
+msgid "Not your turn."
+msgstr ""
+
+msgid "Opponent"
+msgstr ""
+
+msgid "The game is open in the lobby. Waiting for an opponent. Escape — cancel."
+msgstr ""
+
+msgid "The message is empty."
+msgstr ""
+
+msgid "Unknown player"
+msgstr ""
+
+msgid "Write a message"
+msgstr ""
+
+msgid "a hazard card cannot be played on yourself"
+msgstr ""
+
+msgid "a hazard card needs a target"
+msgstr ""
+
+msgid "a target is required"
+msgstr ""
+
+msgid "no such player in this game"
+msgstr ""
+
+msgid "speed limit: only 25 or 50 miles allowed"
+msgstr ""
+
+msgid "the car cannot move"
+msgstr ""
+
+msgid "the car must be repaired and started first"
+msgstr ""
+
+msgid "the game is over"
+msgstr ""
+
+msgid "this card can only be played on yourself"
+msgstr ""
+
+msgid "this card is not in hand"
+msgstr ""
+

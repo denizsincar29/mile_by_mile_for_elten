@@ -95,8 +95,12 @@ def display_text(text, header: '', **_kw)
   DISPLAYED_TEXT << [header, text]
 end
 
-# ListBox stub: Enter on the first card is simulated on the first update call,
-# so the human always plays the first card in hand.
+# ListBox stub for the unified game screen: the SAME list instance lives for the
+# whole game, so "the human plays the focused card on every one of their turns"
+# is simulated by re-firing :select whenever the list is refreshed while the
+# current phase belongs to the human (refresh_hand_list runs on every human
+# phase entry, so each human action window is armed exactly once).
+$current_ui = nil
 class ListBox
   module Flags
     MultiSelection = 1
@@ -104,13 +108,14 @@ class ListBox
     HotKeys = 32
   end
 
-  attr_reader :index, :options
+  attr_accessor :index
+  attr_reader :options
 
   def initialize(options, header: '', index: 0, flags: 0, quiet: false, **_kw)
     @options = options
     @index = index
     @events = Hash.new { |h, k| h[k] = [] }
-    @updated = false
+    @armed = false
   end
 
   def on(event, &block)
@@ -122,11 +127,22 @@ class ListBox
 
   def set_item_status(*_args); end
 
-  def update
-    return if @updated || @options.empty?
+  def human_phase?
+    ui = $current_ui
+    ui && ui.instance_variable_get(:@phase) == :human
+  end
 
-    @updated = true
-    @index = 0
+  def options=(opts)
+    @options = opts
+    @armed = human_phase? && !opts.empty?
+  end
+
+  def update
+    return unless human_phase?
+    return if $current_ui.instance_variable_get(:@pending_pick)
+    return unless @armed && !@options.empty?
+
+    @armed = false
     @events[:select].each { |block| block.call([@index]) }
   end
 end
@@ -167,7 +183,7 @@ class Runner
   def run
     @running = true
     @result = nil
-    200.times do
+    600.times do
       break unless @running
 
       @tick.call(self) if @tick
@@ -219,19 +235,26 @@ end
 # --- run N full games through MileByMileElten::UI ---
 GAMES = (ARGV[0] || 30).to_i
 crashes = 0
+incomplete = 0
 
 GAMES.times do |i|
   ALERTS.clear
   SPEECH.clear
   program = FakeProgram.new
   ui = MileByMileElten::UI.new(program)
+  $current_ui = ui
   # scenario: variant (0=cars/1=horses alternating), distance (0=1000),
   # deck (0=each own deck, 3=3 common decks alternating), then the human
-  # always plays the first card in hand until the game ends.
+  # always plays the focused card in hand until the game ends.
   $form_values_script = [[i.even? ? 0 : 1, 0, i.even? ? 0 : 3]]
 
   begin
     ui.send(:play_vs_bot)
+    game = ui.instance_variable_get(:@game)
+    unless game && game.finished?
+      incomplete += 1
+      puts "GAME ##{i} DID NOT FINISH (phase=#{ui.instance_variable_get(:@phase).inspect}, hand=#{ui.instance_variable_get(:@human).hand.size})"
+    end
   rescue StandardError => e
     crashes += 1
     puts "GAME ##{i} CRASHED: #{e.class}: #{e.message}"
@@ -266,7 +289,7 @@ rescue StandardError => e
   puts "HELP CRASHED: #{e.class}: #{e.message}"
 end
 
-puts "Done: #{GAMES} games via the UI (human always plays the first card in hand), crashes: #{crashes}"
+puts "Done: #{GAMES} games via the UI (human always plays the focused card in hand), crashes: #{crashes}, incomplete: #{incomplete}"
 puts "Ctrl+M/S status speech: #{status_crashes.zero? ? 'yes' : 'NO'}"
 puts "Rules screen rendered via display_text: #{help_crashes.zero? ? 'yes' : 'NO'}"
-exit(crashes.zero? && status_crashes.zero? && help_crashes.zero? ? 0 : 1)
+exit(crashes.zero? && incomplete.zero? && status_crashes.zero? && help_crashes.zero? ? 0 : 1)
