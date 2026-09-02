@@ -6,6 +6,8 @@
   "build_id": 8,
   "EltenAPIVersion": "3.0",
   "author": "denizsincar29",
+  "main_language": "en",
+  "supported_languages": ["en", "de", "es", "fr", "it", "pl", "pt", "ru", "tr", "uk"],
   "main_class": "ProgramMileByMile",
   "platforms": ["all"],
   "description": "Настольная игра «Миля за милей» (Mille Bornes) с ботом-соперником"
