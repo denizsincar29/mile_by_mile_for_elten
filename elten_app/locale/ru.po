@@ -9,6 +9,9 @@ msgstr ""
 msgid "Mile by Mile"
 msgstr "Миля за милей"
 
+msgid "%{nick} invites you to Mile by Mile"
+msgstr "%{nick} приглашает вас в «Милю за милей»"
+
 msgid "Play against the bot"
 msgstr "Играть с ботом"
 
