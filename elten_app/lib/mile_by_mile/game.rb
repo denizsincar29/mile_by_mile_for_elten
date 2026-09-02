@@ -93,6 +93,58 @@ module MileByMile
       play(player.hand[card_index], target: target_player)
     end
 
+    # Сыграется ли карта с эффектом прямо сейчас (не уйдёт впустую в отбой)?
+    # Чистый предикат: состояние не меняет. Зеркалит условия из play_* —
+    # держим рядом, чтобы правки правил не разъезжались. target нужен для
+    # карт на соперника (HazardCard, RemoveAllSafetiesCard).
+    def effective?(card, target: nil)
+      return false if finished?
+
+      car = current_player.car
+      case card
+      when DistanceCard
+        return false unless car.moving?
+        return false if car.speed_limited? && card.miles > 50
+
+        if car.reversed?
+          return false if car.distance < card.miles
+        else
+          return false if car.distance + card.miles > distance_target
+        end
+        true
+      when RemedyCard
+        case card.cures
+        when :turned_back
+          car.reversed? && car.running?
+        when :stall
+          !car.running? && !car.stalled_by?(:empty_tank) && !car.stalled_by?(:flat_tire) && !car.stalled_by?(:accident)
+        when :speed_limit
+          car.speed_limited?
+        else
+          car.stalled_by?(card.cures)
+        end
+      when SafetyCard
+        !car.safety?(card.type)
+      when HazardCard
+        return false if target.nil?
+
+        tcar = target.car
+        return false if tcar.safety?(card.type)
+
+        case card.type
+        when :stall then tcar.running?
+        when :empty_tank, :flat_tire then !tcar.stalled_by?(card.type)
+        when :speed_limit then !tcar.speed_limited?
+        when :accident, :turned_back then tcar.moving?
+        when :skip_turn then true
+        end
+      when RemoveAllSafetiesCard
+        !target.nil?
+      else
+        false
+      end
+    end
+
     private
 
     # уходит в отбой, ход передаётся следующему (использовано впустую)
@@ -156,6 +208,15 @@ module MileByMile
         return discard_wasted(player, card) if car.stalled_by?(:empty_tank)
         return discard_wasted(player, card) if car.stalled_by?(:flat_tire)
         return discard_wasted(player, card) if car.stalled_by?(:accident)
+
+        car.apply_remedy!(card.type)
+        discard_played(player, card)
+      when :speed_limit
+        # «Конец ограничения скорости» снимает именно speed_limited?, а не
+        # стоп-аварию: stalled_by?(:speed_limit) всегда ложен (ограничение
+        # живёт в @speed_limited), поэтому отдельная ветка — иначе карта
+        # вечно уходила бы в отбой как неприменимая
+        return discard_wasted(player, card) unless car.speed_limited?
 
         car.apply_remedy!(card.type)
         discard_played(player, card)
