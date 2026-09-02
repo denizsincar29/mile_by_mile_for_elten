@@ -10,9 +10,9 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 APP_NAME="MileByMile"
-SRC="elten_app"
+SRC="src"
 
-# the engine lives as a copy inside elten_app/ — sync it before installing
+# the engine lives as a copy inside src/ — sync it before installing
 sh sync_engine.sh >/dev/null
 
 # Elten keeps programs in <appdata>/elten/apps/src

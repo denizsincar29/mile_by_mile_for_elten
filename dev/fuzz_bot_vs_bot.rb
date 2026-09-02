@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../lib/mile_by_mile'
-require_relative '../elten_app/lib/mile_by_mile_elten/bot'
+require_relative '../src/lib/mile_by_mile_elten/bot'
 
 include MileByMile
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Builds an unsigned program package from the elten_app folder, mirroring
+# Builds an unsigned program package from the src folder, mirroring
 # Elten's Programs::UnsignedPackageBuilder (src/eapi/unsigned_package_builder.rb).
 # Output format is chosen by extension:
 #   .eltenapp — single code container (installed via the Elten app repository);
@@ -222,7 +222,7 @@ def build(source_dir, output)
 end
 
 root = File.expand_path('..', __dir__)
-source = File.join(root, 'elten_app')
+source = File.join(root, 'src')
 output = ARGV[0] || File.join(root, 'build', "#{APP_NAME}.eltenapp")
 require 'fileutils'
 result = build(source, output)

@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 # Компилирует GNU-шный .po в бинарный .mo (gettext). Нужен потому, что в
-# окружении нет msgfmt: Elten собирает готовый .mo из elten_app/locale/.
+# окружении нет msgfmt: Elten собирает готовый .mo из src/locale/.
 #
 # Использование: ruby tools/po2mo.rb <input.po> <output.mo>
 # Ломается с ненулевым кодом, если в .po встретилась неподдерживаемая

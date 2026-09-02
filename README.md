@@ -1,7 +1,7 @@
 # mile_by_mile_for_elten
 
 A Ruby implementation of the "Mile by Mile" board game (aka Mille Bornes) —
-the engine behind an Elten app for blind users (see `elten_app/`).
+the engine behind an Elten app for blind users (see `src/`).
 
 ## Structure
 
@@ -25,7 +25,7 @@ test/mile_by_mile_test.rb        — smoke tests (minitest, stdlib)
 
 Card names are plain English strings (gettext source/msgid). The engine
 itself has no gettext dependency — translation happens only in the Elten
-UI layer (`elten_app/`), see its README for the ru/pl locale.
+UI layer (`src/`), see its README for the ru/pl locale.
 
 ## Note on deck size
 
@@ -41,11 +41,11 @@ ruby test/mile_by_mile_test.rb
 
 ## Next
 
-- Elten port (voice interface for blind users) — done, see `elten_app/`.
+- Elten port (voice interface for blind users) — done, see `src/`.
   Bot-only for now (multiplayer is on hold per Dawid Pieper — the
   signalling protocol is being redesigned).
 - Multiplayer: real players — implemented on `EltenAPI::Communication`
   (Elten 3.0.2 RC 1): `create_session` + `session.invite` for the host,
   `on_invitation` + `accept` for the guest, `send_reliable` for moves.
-- Sounds are in `elten_app/Audio/` (see that README for the naming scheme
+- Sounds are in `src/Audio/` (see that README for the naming scheme
   and a note on how Elten resolves sound asset names).

@@ -8,9 +8,9 @@
 
 require 'json'
 require_relative '../lib/mile_by_mile'
-require_relative '../elten_app/lib/mile_by_mile_elten/bot'
-require_relative '../elten_app/lib/mile_by_mile_elten/audio'
-require_relative '../elten_app/lib/mile_by_mile_elten/ui'
+require_relative '../src/lib/mile_by_mile_elten/bot'
+require_relative '../src/lib/mile_by_mile_elten/audio'
+require_relative '../src/lib/mile_by_mile_elten/ui'
 
 def parse_type?(data)
   JSON.parse(data.to_s.dup.force_encoding(Encoding::UTF_8))['type']
