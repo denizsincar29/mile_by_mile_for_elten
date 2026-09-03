@@ -558,7 +558,9 @@ module MileByMileElten
         end
       sessions = sessions.reject(&:full?)
       if sessions.empty?
-        alert(_('No games in the lobby yet.'), false)
+        # notice, not a non-blocking alert: the latter is overridden by the menu
+        # re-announcing its items as soon as we return, so the user hears nothing.
+        notice(_('No games in the lobby yet.'))
         return
       end
 
