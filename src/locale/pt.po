@@ -580,86 +580,86 @@ msgid "Cannot accept the invitation."
 msgstr "Não é possível aceitar o convite."
 
 msgid "%{nick} invites you to Mile by Mile"
-msgstr ""
+msgstr "%{nick} convida-o para jogar Milha após milha"
 
 msgid "%{nick} left the game and conceded."
-msgstr ""
+msgstr "%{nick} saiu do jogo e reconheceu a derrota."
 
 msgid "%{nick} lost the connection."
-msgstr ""
+msgstr "%{nick} perdeu a ligação."
 
 msgid "Cancel waiting for an opponent?"
-msgstr ""
+msgstr "Cancelar a espera por um adversário?"
 
 msgid "Cannot join the game."
-msgstr ""
+msgstr "Não foi possível entrar no jogo."
 
 msgid "Friend nickname"
-msgstr ""
+msgstr "Nick do amigo"
 
 msgid "In a multiplayer game, Ctrl+/ — write a message, Ctrl+[ and Ctrl+] — read the chat history."
-msgstr ""
+msgstr "Num jogo multijogador, Ctrl+/ — escrever uma mensagem, Ctrl+[ e Ctrl+] — ler o histórico do chat."
 
 msgid "Invite a friend"
-msgstr ""
+msgstr "Convidar um amigo"
 
 msgid "Join a game"
-msgstr ""
+msgstr "Entrar numa partida"
 
 msgid "No chat messages yet."
-msgstr ""
+msgstr "Ainda não há mensagens no chat."
 
 msgid "No games in the lobby yet."
-msgstr ""
+msgstr "Ainda não há jogos no lobby."
 
 msgid "No one joined the game."
-msgstr ""
+msgstr "Ninguém entrou no jogo."
 
 msgid "Not your turn."
-msgstr ""
+msgstr "Não é a sua vez."
 
 msgid "Opponent"
-msgstr ""
+msgstr "Adversário"
 
 msgid "The game is open in the lobby. Waiting for an opponent. Escape — cancel."
-msgstr ""
+msgstr "O jogo está aberto no lobby. À espera de um adversário. Escape — cancelar."
 
 msgid "The message is empty."
-msgstr ""
+msgstr "A mensagem está vazia."
 
 msgid "Unknown player"
-msgstr ""
+msgstr "Jogador desconhecido"
 
 msgid "Write a message"
-msgstr ""
+msgstr "Escrever uma mensagem"
 
 msgid "a hazard card cannot be played on yourself"
-msgstr ""
+msgstr "uma carta de perigo não pode ser jogada contra si próprio"
 
 msgid "a hazard card needs a target"
-msgstr ""
+msgstr "uma carta de perigo precisa de um alvo"
 
 msgid "a target is required"
-msgstr ""
+msgstr "é necessário um alvo"
 
 msgid "no such player in this game"
-msgstr ""
+msgstr "não existe esse jogador neste jogo"
 
 msgid "speed limit: only 25 or 50 miles allowed"
-msgstr ""
+msgstr "limite de velocidade: só são permitidas 25 ou 50 milhas"
 
 msgid "the car cannot move"
-msgstr ""
+msgstr "o carro não pode andar"
 
 msgid "the car must be repaired and started first"
-msgstr ""
+msgstr "primeiro é preciso reparar e ligar o carro"
 
 msgid "the game is over"
-msgstr ""
+msgstr "o jogo terminou"
 
 msgid "this card can only be played on yourself"
-msgstr ""
+msgstr "esta carta só pode ser jogada sobre si próprio"
 
 msgid "this card is not in hand"
-msgstr ""
+msgstr "esta carta não está na mão"
 

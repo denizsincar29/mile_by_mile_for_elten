@@ -580,86 +580,86 @@ msgid "Cannot accept the invitation."
 msgstr "Davet kabul edilemiyor."
 
 msgid "%{nick} invites you to Mile by Mile"
-msgstr ""
+msgstr "%{nick} seni Mil mil oynamaya davet ediyor"
 
 msgid "%{nick} left the game and conceded."
-msgstr ""
+msgstr "%{nick} oyundan ayrıldı ve mağlubiyeti kabul etti."
 
 msgid "%{nick} lost the connection."
-msgstr ""
+msgstr "%{nick} bağlantıyı kaybetti."
 
 msgid "Cancel waiting for an opponent?"
-msgstr ""
+msgstr "Rakip beklemeyi iptal et?"
 
 msgid "Cannot join the game."
-msgstr ""
+msgstr "Oyuna katılınamadı."
 
 msgid "Friend nickname"
-msgstr ""
+msgstr "Arkadaşın nicki"
 
 msgid "In a multiplayer game, Ctrl+/ — write a message, Ctrl+[ and Ctrl+] — read the chat history."
-msgstr ""
+msgstr "Çok oyunculu oyunda, Ctrl+/ — mesaj yaz, Ctrl+[ ve Ctrl+] — sohbet geçmişini oku."
 
 msgid "Invite a friend"
-msgstr ""
+msgstr "Arkadaşını davet et"
 
 msgid "Join a game"
-msgstr ""
+msgstr "Oyuna katıl"
 
 msgid "No chat messages yet."
-msgstr ""
+msgstr "Henüz sohbet mesajı yok."
 
 msgid "No games in the lobby yet."
-msgstr ""
+msgstr "Lobide henüz oyun yok."
 
 msgid "No one joined the game."
-msgstr ""
+msgstr "Oyuna kimse katılmadı."
 
 msgid "Not your turn."
-msgstr ""
+msgstr "Sıra sende değil."
 
 msgid "Opponent"
-msgstr ""
+msgstr "Rakip"
 
 msgid "The game is open in the lobby. Waiting for an opponent. Escape — cancel."
-msgstr ""
+msgstr "Oyun lobide açık. Rakip bekleniyor. Escape — iptal."
 
 msgid "The message is empty."
-msgstr ""
+msgstr "Mesaj boş."
 
 msgid "Unknown player"
-msgstr ""
+msgstr "Bilinmeyen oyuncu"
 
 msgid "Write a message"
-msgstr ""
+msgstr "Mesaj yaz"
 
 msgid "a hazard card cannot be played on yourself"
-msgstr ""
+msgstr "tehlike kartı kendine karşı oynanamaz"
 
 msgid "a hazard card needs a target"
-msgstr ""
+msgstr "tehlike kartı bir hedef gerektirir"
 
 msgid "a target is required"
-msgstr ""
+msgstr "bir hedef gerekli"
 
 msgid "no such player in this game"
-msgstr ""
+msgstr "bu oyunda böyle bir oyuncu yok"
 
 msgid "speed limit: only 25 or 50 miles allowed"
-msgstr ""
+msgstr "hız sınırı: yalnızca 25 veya 50 mil izinli"
 
 msgid "the car cannot move"
-msgstr ""
+msgstr "araba hareket edemiyor"
 
 msgid "the car must be repaired and started first"
-msgstr ""
+msgstr "önce araba tamir edilip çalıştırılmalı"
 
 msgid "the game is over"
-msgstr ""
+msgstr "oyun bitti"
 
 msgid "this card can only be played on yourself"
-msgstr ""
+msgstr "bu kart yalnızca kendine oynanabilir"
 
 msgid "this card is not in hand"
-msgstr ""
+msgstr "bu kart elde değil"
 

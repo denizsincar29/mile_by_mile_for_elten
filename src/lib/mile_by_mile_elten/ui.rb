@@ -196,8 +196,12 @@ module MileByMileElten
 
     # Elten's gettext reads .mo strings as ASCII-8BIT; re-tag to UTF-8 so
     # join/% with UTF-8 literals don't raise Encoding::CompatibilityError.
+    # A missing or empty .mo entry makes Elten return nil (or an empty string);
+    # fall back to the English msgid instead of crashing on nil.
     def _(msgid)
-      super(msgid).dup.force_encoding(Encoding::UTF_8)
+      text = super(msgid)
+      return msgid if text.nil? || text.empty?
+      text.dup.force_encoding(Encoding::UTF_8)
     end
 
     def play_vs_bot
